@@ -1,10 +1,10 @@
 import {flags} from '@oclif/command'
-import {MergeDriverBase} from '../base'
+import {MergeDriverBase} from '../../base'
 import * as path from 'path'
 import * as shell from 'shelljs'
 import * as fs from 'fs'
 
-const PackageJson = require('../utils/package-json')
+const PackageJson = require('../../utils/package-json')
 const pjson = new PackageJson()
 
 export default class Uninstall extends MergeDriverBase {

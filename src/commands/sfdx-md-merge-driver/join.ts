@@ -5,7 +5,11 @@ export default class Join extends Command {
 
   static flags = {
     help: flags.help({char: 'h'}),
-    meta: flags.string({char: 'm', description: 'path(s) to file(s) to join', multiple: true}),
+    meta: flags.string({
+      char: 'm',
+      description: 'path(s) to file(s) to join',
+      multiple: true,
+    }),
   }
 
   async run() {

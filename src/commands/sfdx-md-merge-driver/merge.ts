@@ -1,5 +1,5 @@
 import {flags} from '@oclif/command'
-import {MergeDriverBase} from '../base'
+import {MergeDriverBase} from '../../base'
 import * as fs from 'fs'
 import * as xml2js from 'xml2js'
 
@@ -34,7 +34,7 @@ hello world from ./src/hello.ts!
 
   async run() {
     const {args} = this.parse(Merge)
-    const md = new (require('../utils/metadata-merger'))(
+    const md = new (require('../../utils/metadata-merger'))(
       args['%O'],
       args['%A'],
       args['%B'],
