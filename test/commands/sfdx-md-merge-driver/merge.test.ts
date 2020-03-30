@@ -2,7 +2,7 @@
 import {expect, test} from '@oclif/test'
 import * as shell from 'shelljs'
 
-describe('merge', () => {
+describe('sfdx-md-merge-driver:merge', () => {
   afterEach(function() {
     shell.exec('git checkout -q -- test/files/*')
   })
@@ -11,7 +11,7 @@ describe('merge', () => {
     .stub(process, 'exit', () => 'foobar')
     .stderr()
     .command([
-      'merge',
+      'sfdx-md-merge-driver:merge',
       './test/files/ancestor.profile-meta.xml',
       './test/files/ours.profile-meta.xml',
       './test/files/theirs.profile-meta.xml',
@@ -26,7 +26,7 @@ describe('merge', () => {
     .stub(process, 'exit', () => 'foobar')
     .stderr()
     .command([
-      'merge',
+      'sfdx-md-merge-driver:merge',
       'no_file',
       './test/files/ours.profile-meta.xml',
       './test/files/theirs.profile-meta.xml',
@@ -56,7 +56,7 @@ describe('merge', () => {
     .stub(process, 'exit', () => 'foobar')
     .stderr()
     .command([
-      'merge',
+      'sfdx-md-merge-driver:merge',
       './test/files/ancestor.profile-meta.xml',
       './test/files/ours.profile-meta.xml',
       'no_file',

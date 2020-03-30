@@ -22,6 +22,13 @@ In the case of a node being modified in our local workspace and in the branch we
 * [Commands](#commands)
 * [Author](#author)
 <!-- tocstop -->
+* [sfdx-md-merge-driver](#sfdx-md-merge-driver)
+* [Automatic Setup (recommended)](#automatic-setup-recommended)
+* [Install as Dependency](#install-as-dependency)
+* [Uninstalling](#uninstalling)
+* [Commands](#commands)
+* [Author](#author)
+<!-- tocstop -->
 
 # Automatic Setup (recommended)
 
@@ -62,6 +69,18 @@ $ npm install -g sfdx-md-merge-driver
 $ sfdx-md-merge-driver COMMAND
 running command...
 $ sfdx-md-merge-driver (-v|--version|version)
+sfdx-md-merge-driver/0.1.4 win32-x64 node-v12.16.1
+$ sfdx-md-merge-driver --help [COMMAND]
+USAGE
+  $ sfdx-md-merge-driver COMMAND
+...
+```
+<!-- usagestop -->
+```sh-session
+$ npm install -g sfdx-md-merge-driver
+$ sfdx-md-merge-driver COMMAND
+running command...
+$ sfdx-md-merge-driver (-v|--version|version)
 sfdx-md-merge-driver/0.1.4 darwin-x64 node-v12.16.1
 $ sfdx-md-merge-driver --help [COMMAND]
 USAGE
@@ -87,6 +106,108 @@ $ npm uninstall -g sfdx-md-merge-driver
 # Commands
 
 <!-- commands -->
+* [`sfdx-md-merge-driver help [COMMAND]`](#sfdx-md-merge-driver-help-command)
+* [`sfdx-md-merge-driver sfdx-md-merge-driver:install`](#sfdx-md-merge-driver-sfdx-md-merge-driverinstall)
+* [`sfdx-md-merge-driver sfdx-md-merge-driver:join`](#sfdx-md-merge-driver-sfdx-md-merge-driverjoin)
+* [`sfdx-md-merge-driver sfdx-md-merge-driver:merge %O %A %B [%P]`](#sfdx-md-merge-driver-sfdx-md-merge-drivermerge-o-a-b-p)
+* [`sfdx-md-merge-driver sfdx-md-merge-driver:uninstall`](#sfdx-md-merge-driver-sfdx-md-merge-driveruninstall)
+
+## `sfdx-md-merge-driver help [COMMAND]`
+
+display help for sfdx-md-merge-driver
+
+```
+USAGE
+  $ sfdx-md-merge-driver help [COMMAND]
+
+ARGUMENTS
+  COMMAND  command to show help for
+
+OPTIONS
+  --all  see all commands in CLI
+```
+
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v2.2.3/src\commands\help.ts)_
+
+## `sfdx-md-merge-driver sfdx-md-merge-driver:install`
+
+Set up the merge driver in the current git repository.
+
+```
+USAGE
+  $ sfdx-md-merge-driver sfdx-md-merge-driver:install
+
+OPTIONS
+  -d, --driver=driver
+      [default: npx sfdx-md-merge-driver merge %O %A %B %P] string to install as the driver in the git configuration
+
+  -g, --global
+      install to your user-level git configuration
+
+  -h, --help
+      show CLI help
+
+  -n, --name=name
+      [default: sfdx-md-merge-driver] String to use as the merge driver name in your configuration.
+
+  -t, --files=*.profile|*.profile-meta.xml|*.permissionset|*.permissionset-meta.xml|*.labels|*.labels-meta.xml
+      [default: *.profile,*.profile-meta.xml,*.permissionset,*.permissionset-meta.xml,*.labels,*.labels-meta.xml] 
+      Filenames that will trigger this driver.
+```
+
+_See code: [src\commands\sfdx-md-merge-driver\install.ts](https://github.com/jayree/sfdx-md-merge-driver/blob/v0.1.4/src\commands\sfdx-md-merge-driver\install.ts)_
+
+## `sfdx-md-merge-driver sfdx-md-merge-driver:join`
+
+doing a complete merge of files, not a git merge
+
+```
+USAGE
+  $ sfdx-md-merge-driver sfdx-md-merge-driver:join
+
+OPTIONS
+  -h, --help       show CLI help
+  -m, --meta=meta  path(s) to file(s) to join
+```
+
+_See code: [src\commands\sfdx-md-merge-driver\join.ts](https://github.com/jayree/sfdx-md-merge-driver/blob/v0.1.4/src\commands\sfdx-md-merge-driver\join.ts)_
+
+## `sfdx-md-merge-driver sfdx-md-merge-driver:merge %O %A %B [%P]`
+
+Check for conflicts and merge them if possible.
+
+```
+USAGE
+  $ sfdx-md-merge-driver sfdx-md-merge-driver:merge %O %A %B [%P]
+
+ARGUMENTS
+  %O  ancestor’s version
+  %A  current version
+  %B  other branches' version
+  %P  pathname in which the merged result will be stored
+
+OPTIONS
+  -h, --help  show CLI help
+```
+
+_See code: [src\commands\sfdx-md-merge-driver\merge.ts](https://github.com/jayree/sfdx-md-merge-driver/blob/v0.1.4/src\commands\sfdx-md-merge-driver\merge.ts)_
+
+## `sfdx-md-merge-driver sfdx-md-merge-driver:uninstall`
+
+Remove a previously configured driver
+
+```
+USAGE
+  $ sfdx-md-merge-driver sfdx-md-merge-driver:uninstall
+
+OPTIONS
+  -g, --global     install to your user-level git configuration
+  -h, --help       show CLI help
+  -n, --name=name  [default: sfdx-md-merge-driver] String to use as the merge driver name in your configuration.
+```
+
+_See code: [src\commands\sfdx-md-merge-driver\uninstall.ts](https://github.com/jayree/sfdx-md-merge-driver/blob/v0.1.4/src\commands\sfdx-md-merge-driver\uninstall.ts)_
+<!-- commandsstop -->
 * [`sfdx-md-merge-driver help [COMMAND]`](#sfdx-md-merge-driver-help-command)
 * [`sfdx-md-merge-driver install`](#sfdx-md-merge-driver-install)
 * [`sfdx-md-merge-driver merge %O %A %B [%P]`](#sfdx-md-merge-driver-merge-o-a-b-p)

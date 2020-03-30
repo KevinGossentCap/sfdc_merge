@@ -2,7 +2,7 @@
     "version": "0.1.4",
     "commands": {
         "sfdx-md-merge-driver:install": {
-            "id": "install",
+            "id": "sfdx-md-merge-driver:install",
             "description": "Set up the merge driver in the current git repository.",
             "pluginName": "sfdx-md-merge-driver",
             "pluginType": "core",
@@ -62,7 +62,7 @@
             "args": []
         },
         "sfdx-md-merge-driver:merge": {
-            "id": "merge",
+            "id": "sfdx-md-merge-driver:merge",
             "description": "Check for conflicts and merge them if possible.",
             "pluginName": "sfdx-md-merge-driver",
             "pluginType": "core",
@@ -99,7 +99,7 @@
             ]
         },
         "sfdx-md-merge-driver:uninstall": {
-            "id": "uninstall",
+            "id": "sfdx-md-merge-driver:uninstall",
             "description": "Remove a previously configured driver",
             "pluginName": "sfdx-md-merge-driver",
             "pluginType": "core",
@@ -130,7 +130,7 @@
             "args": []
         },
         "sfdx-md-merge-driver:join": {
-            "id": "join",
+            "id": "sfdx-md-merge-driver:join",
             "description": "doing a complete merge of files, not a git merge",
             "pluginName": "sfdx-md-merge-driver",
             "pluginType": "core",

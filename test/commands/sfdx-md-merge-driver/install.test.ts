@@ -1,9 +1,9 @@
 import {expect, test} from '@oclif/test'
 
-describe('install', () => {
+describe('sfdx-md-merge-driver:install', () => {
   test
     .stdout()
-    .command(['install'])
+    .command(['sfdx-md-merge-driver:install'])
     .it('runs install', ctx => {
       expect(ctx.stdout).to.contain('')
     })
