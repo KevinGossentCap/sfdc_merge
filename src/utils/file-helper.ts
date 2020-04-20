@@ -192,3 +192,55 @@ export async function writeOutput(meta, file, jsonOutput) {
     console.log('joined:', JSON.stringify(base))
   }
 }
+
+export async function doReadWrite(files: string[], verbose: boolean) {
+  return Promise.all(
+    files.map((file, index) => {
+      startTimer(
+        verbose,
+        'file: ' +
+          file +
+          ' index: ' +
+          index.toString().padStart(3) +
+          ' reading',
+      )
+      return fsp
+        .readFile(file, {flag: 'r', encoding: 'utf8'})
+        .then((data) => {
+          endTimer(
+            verbose,
+            'file: ' +
+              file +
+              ' index: ' +
+              index.toString().padStart(3) +
+              ' reading',
+          )
+          startTimer(
+            verbose,
+            'file: ' +
+              file +
+              ' index: ' +
+              index.toString().padStart(3) +
+              ' parsing xml',
+          )
+          const xmljsResult = xmljs.xml2js(data, optXml2js)
+          endTimer(
+            verbose,
+            'file: ' +
+              file +
+              ' index: ' +
+              index.toString().padStart(3) +
+              ' parsing xml',
+          )
+          return xmljsResult
+        })
+        .then((data) => {
+          startTimer(verbose, 'writing keyed time')
+          fsp.writeFile(file, xmljs.js2xml(data, optJs2xml).concat('\n'), {
+            encoding: 'utf8',
+          })
+          endTimer(verbose, 'writing keyed time')
+        })
+    }),
+  )
+}

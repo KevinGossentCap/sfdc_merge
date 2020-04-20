@@ -1,27 +1,43 @@
 import {Command, flags} from '@oclif/command'
+import {startTimer, endTimer} from '../utils/verbose-helper'
+import {allFilesExist, doReadWrite} from '../utils/file-helper'
 
 export default class Sort extends Command {
   static description = 'describe the command here'
 
   static flags = {
     help: flags.help({char: 'h'}),
-    // flag with a value (-n, --name=VALUE)
-    name: flags.string({char: 'n', description: 'name to print'}),
-    // flag with no value (-f, --force)
-    force: flags.boolean({char: 'f'}),
+    meta: flags.string({
+      char: 'm',
+      description: 'path(s) to file(s) to sort',
+      multiple: true,
+    }),
+    verbose: flags.boolean({
+      char: 'v',
+      description: 'verbose mode',
+    }),
   }
 
-  static args = [{name: 'file'}]
-
   async run() {
-    const {args, flags} = this.parse(Sort)
+    const {flags} = this.parse(Sort)
+    startTimer(flags.verbose, 'teatment time')
 
-    const name = flags.name || 'world'
-    this.log(
-      `hello ${name} from C:\\GitRepos\\sfdc_md_merge_driver\\src\\commands\\sort.ts`,
-    )
-    if (args.file && flags.force) {
-      this.log(`you input --force and --file: ${args.file}`)
+    startTimer(flags.verbose, 'input check time')
+    if (flags.meta === undefined) {
+      console.error('list of permissions to merge is empty')
+      endTimer(flags.verbose, 'teatment time')
+      return ''
     }
+    await allFilesExist(flags.meta).catch(() => {
+      console.error('at least a metadataFile is not accessible')
+      endTimer(flags.verbose, 'teatment time')
+      throw new Error('at least a metadataFile is not accessible')
+    })
+    endTimer(flags.verbose, 'input check time')
+
+    await doReadWrite(flags.meta, flags.verbose)
+
+    endTimer(flags.verbose, 'teatment time')
+    console.log('sfdx-md-merge-driver:', 'successfully sorted.')
   }
 }
