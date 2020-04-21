@@ -49,6 +49,8 @@ describe('join', () => {
       '-o',
       './test/files/package2.xml',
       '-v',
+      '-l',
+      '2',
     ])
     .it('runs join verbose', (ctx) => {
       expect(process.exit()).to.equal('foobar')

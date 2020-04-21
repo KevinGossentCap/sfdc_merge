@@ -2,22 +2,28 @@ export function addVerboseInfo(verbose: boolean, ...args): void {
   if (verbose) console.log(...args)
 }
 
-export function startTimer(verbose: boolean, strStep: string) {
-  if (verbose) console.time(strStep)
+// verbose: boolean, strStep: string
+// level: number, expected: number, strStep: string
+export function startTimer(...args) {
+  switch (args.length) {
+    case 2:
+      if (args[0]) console.time(args[1])
+      break
+    case 3:
+      if (args[0] >= args[1]) console.time(args[2])
+      break
+  }
 }
 
-export function endTimer(verbose: boolean, strStep: string) {
-  if (verbose) console.timeEnd(strStep)
+// verbose: boolean, strStep: string
+// level: number, expected: number, strStep: string
+export function endTimer(...args) {
+  switch (args.length) {
+    case 2:
+      if (args[0]) console.timeEnd(args[1])
+      break
+    case 3:
+      if (args[0] >= args[1]) console.timeEnd(args[2])
+      break
+  }
 }
-
-// export function printVerboseInfo(
-//   verboseTab: Array<Record<string, any>>,
-//   verbose: boolean,
-// ) {
-//   if (verbose) {
-//     for (const elem of verboseTab) {
-//       console.log(Object.keys(elem)[0], Object.values(elem)[0])
-//     }
-//     console.timeEnd(constants.steps.global)
-//   }
-// }

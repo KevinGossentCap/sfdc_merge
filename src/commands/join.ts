@@ -29,6 +29,11 @@ export default class Join extends Command {
       char: 'v',
       description: 'verbose mode',
     }),
+    loglevel: flags.integer({
+      char: 'l',
+      description: 'level of verbose details',
+      default: 0,
+    }),
     algo: flags.string({
       char: 'a',
       description: 'algorithm for join, latest or meld',
@@ -42,6 +47,7 @@ export default class Join extends Command {
     startTimer(flags.verbose, constants.steps.global)
 
     startTimer(flags.verbose, constants.steps.inputs)
+    if (flags.verbose && !flags.loglevel) flags.loglevel = 1
     await allFilesExist(flags.meta).catch(() => {
       console.error(constants.ERR_META_NOT_REACHABLE.message)
       endTimer(flags.verbose, constants.steps.global)
@@ -78,7 +84,7 @@ export default class Join extends Command {
 
     startTimer(flags.verbose, constants.steps.join.getFiles)
     let fileKeyedJSON
-    await getKeyedFiles(flags.meta, meta, configJson, flags.verbose)
+    await getKeyedFiles(flags.meta, meta, configJson, flags.loglevel)
       .then((result) => {
         fileKeyedJSON = result
       })

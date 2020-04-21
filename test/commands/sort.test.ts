@@ -7,7 +7,7 @@ describe('sort', () => {
   test
     .stub(process, 'exit', () => 'foobar')
     .stdout()
-    .command(['sort', '-m', './test/files/package1.xml', '-v'])
+    .command(['sort', '-m', './test/files/package1.xml', '-v', '-l', '2'])
     .it('runs sort verbose', (ctx) => {
       expect(process.exit()).to.equal('foobar')
       expect(ctx.stdout).to.contain(constants.steps.global)

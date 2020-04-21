@@ -148,11 +148,12 @@ USAGE
   $ sfdx-md-merge-driver join
 
 OPTIONS
-  -a, --algo=latest|meld  [default: latest] algorithm for join, latest or meld
-  -h, --help              show CLI help
-  -m, --meta=meta         (required) path(s) to file(s) to join
-  -o, --output=output     path to write output
-  -v, --verbose           verbose mode
+  -a, --algo=latest|meld   [default: latest] algorithm for join, latest or meld
+  -h, --help               show CLI help
+  -l, --loglevel=loglevel  level of verbose details
+  -m, --meta=meta          (required) path(s) to file(s) to join
+  -o, --output=output      path to write output
+  -v, --verbose            verbose mode
 ```
 
 _See code: [src\commands\join.ts](https://github.com/KevinGossentCap/sfdx-md-merge-driver/blob/v0.2.1/src\commands\join.ts)_
@@ -186,9 +187,10 @@ USAGE
   $ sfdx-md-merge-driver sort
 
 OPTIONS
-  -h, --help       show CLI help
-  -m, --meta=meta  (required) path(s) to file(s) to sort
-  -v, --verbose    verbose mode
+  -h, --help               show CLI help
+  -l, --loglevel=loglevel  level of verbose details
+  -m, --meta=meta          (required) path(s) to file(s) to sort
+  -v, --verbose            verbose mode
 ```
 
 _See code: [src\commands\sort.ts](https://github.com/KevinGossentCap/sfdx-md-merge-driver/blob/v0.2.1/src\commands\sort.ts)_

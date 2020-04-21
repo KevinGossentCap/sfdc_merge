@@ -18,6 +18,11 @@ export default class Sort extends Command {
       char: 'v',
       description: 'verbose mode',
     }),
+    loglevel: flags.integer({
+      char: 'l',
+      description: 'level of verbose details',
+      default: 0,
+    }),
   }
 
   async run() {
@@ -25,6 +30,7 @@ export default class Sort extends Command {
     startTimer(flags.verbose, constants.steps.global)
 
     startTimer(flags.verbose, constants.steps.inputs)
+    if (flags.verbose && !flags.loglevel) flags.loglevel = 1
     await allFilesExist(flags.meta).catch(() => {
       console.error(constants.ERR_META_NOT_REACHABLE.message)
       endTimer(flags.verbose, constants.steps.global)
@@ -32,7 +38,7 @@ export default class Sort extends Command {
     })
     endTimer(flags.verbose, constants.steps.inputs)
 
-    await doReadWrite(flags.meta, flags.verbose)
+    await doReadWrite(flags.meta, flags.loglevel)
 
     endTimer(flags.verbose, constants.steps.global)
     console.log('sfdx-md-merge-driver:', 'successfully sorted.')

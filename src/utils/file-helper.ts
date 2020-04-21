@@ -92,12 +92,13 @@ export async function getKeyedFiles(
   files: string[],
   meta,
   configJson,
-  verbose: boolean,
+  level: number,
 ) {
   return Promise.all(
     files.map((file, index) => {
       startTimer(
-        verbose,
+        level,
+        2,
         'file: ' +
           file +
           ' index: ' +
@@ -108,7 +109,8 @@ export async function getKeyedFiles(
         .readFile(file, {flag: 'r', encoding: 'utf8'})
         .then((data) => {
           endTimer(
-            verbose,
+            level,
+            2,
             'file: ' +
               file +
               ' index: ' +
@@ -116,7 +118,8 @@ export async function getKeyedFiles(
               ' reading',
           )
           startTimer(
-            verbose,
+            level,
+            2,
             'file: ' +
               file +
               ' index: ' +
@@ -125,7 +128,8 @@ export async function getKeyedFiles(
           )
           const xmljsResult = xmljs.xml2js(data, optXml2js)
           endTimer(
-            verbose,
+            level,
+            2,
             'file: ' +
               file +
               ' index: ' +
@@ -142,7 +146,8 @@ export async function getKeyedFiles(
         })
         .then((data) => {
           startTimer(
-            verbose,
+            level,
+            2,
             'file: ' +
               file +
               ' index: ' +
@@ -168,7 +173,8 @@ export async function getKeyedFiles(
             Object.assign(keyedTab, result)
           }
           endTimer(
-            verbose,
+            level,
+            2,
             'file: ' +
               file +
               ' index: ' +
@@ -193,11 +199,12 @@ export async function writeOutput(meta, file, jsonOutput) {
   }
 }
 
-export async function doReadWrite(files: string[], verbose: boolean) {
+export async function doReadWrite(files: string[], level: number) {
   return Promise.all(
     files.map((file, index) => {
       startTimer(
-        verbose,
+        level,
+        2,
         'file: ' +
           file +
           ' index: ' +
@@ -208,7 +215,8 @@ export async function doReadWrite(files: string[], verbose: boolean) {
         .readFile(file, {flag: 'r', encoding: 'utf8'})
         .then((data) => {
           endTimer(
-            verbose,
+            level,
+            2,
             'file: ' +
               file +
               ' index: ' +
@@ -216,7 +224,8 @@ export async function doReadWrite(files: string[], verbose: boolean) {
               ' reading',
           )
           startTimer(
-            verbose,
+            level,
+            2,
             'file: ' +
               file +
               ' index: ' +
@@ -225,7 +234,8 @@ export async function doReadWrite(files: string[], verbose: boolean) {
           )
           const xmljsResult = xmljs.xml2js(data, optXml2js)
           endTimer(
-            verbose,
+            level,
+            2,
             'file: ' +
               file +
               ' index: ' +
@@ -235,11 +245,11 @@ export async function doReadWrite(files: string[], verbose: boolean) {
           return xmljsResult
         })
         .then((data) => {
-          startTimer(verbose, constants.steps.join.writeFile)
+          startTimer(level, 1, constants.steps.join.writeFile)
           fsp.writeFile(file, xmljs.js2xml(data, optJs2xml).concat('\n'), {
             encoding: 'utf8',
           })
-          endTimer(verbose, constants.steps.join.writeFile)
+          endTimer(level, 1, constants.steps.join.writeFile)
         })
     }),
   )
