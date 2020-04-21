@@ -1,6 +1,7 @@
 import {Command, flags} from '@oclif/command'
 import {startTimer, endTimer} from '../utils/verbose-helper'
 import {allFilesExist, doReadWrite} from '../utils/file-helper'
+import {constants} from '../utils/constants'
 
 export default class Sort extends Command {
   static description = 'describe the command here'
@@ -20,24 +21,24 @@ export default class Sort extends Command {
 
   async run() {
     const {flags} = this.parse(Sort)
-    startTimer(flags.verbose, 'teatment time')
+    startTimer(flags.verbose, constants.steps.global)
 
-    startTimer(flags.verbose, 'input check time')
+    startTimer(flags.verbose, constants.steps.inputs)
     if (flags.meta === undefined) {
       console.error('list of permissions to merge is empty')
-      endTimer(flags.verbose, 'teatment time')
-      return ''
+      endTimer(flags.verbose, constants.steps.global)
+      throw new Error('list of permissions to merge is empty')
     }
     await allFilesExist(flags.meta).catch(() => {
-      console.error('at least a metadataFile is not accessible')
-      endTimer(flags.verbose, 'teatment time')
-      throw new Error('at least a metadataFile is not accessible')
+      console.error(constants.ERR_META_NOT_REACHABLE.message)
+      endTimer(flags.verbose, constants.steps.global)
+      throw constants.ERR_META_NOT_REACHABLE
     })
-    endTimer(flags.verbose, 'input check time')
+    endTimer(flags.verbose, constants.steps.inputs)
 
     await doReadWrite(flags.meta, flags.verbose)
 
-    endTimer(flags.verbose, 'teatment time')
+    endTimer(flags.verbose, constants.steps.global)
     console.log('sfdx-md-merge-driver:', 'successfully sorted.')
   }
 }

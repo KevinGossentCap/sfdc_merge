@@ -1,5 +1,6 @@
 /* eslint-disable unicorn/no-process-exit, no-process-exit */
 import {expect, test} from '@oclif/test'
+import {constants} from '../../src/utils/constants'
 
 describe('join', () => {
   const strJoin =
@@ -51,7 +52,7 @@ describe('join', () => {
     ])
     .it('runs join verbose', (ctx) => {
       expect(process.exit()).to.equal('foobar')
-      expect(ctx.stdout).to.contain('teatment time')
+      expect(ctx.stdout).to.contain(constants.steps.global)
     })
 
   test
@@ -102,13 +103,11 @@ describe('join', () => {
     .stderr()
     .command(['join', '-m', './test/files/non_existing.profile-meta.xml'])
     .catch((error) => {
-      expect(error.message).to.equal(
-        'at least a metadataFile is not accessible',
-      )
+      expect(error).to.equal(constants.ERR_META_NOT_REACHABLE)
     })
     .it('runs join with inexisting file', (ctx) => {
       expect(process.exit()).to.equal('foobar')
-      expect(ctx.stderr).to.contain('at least a metadataFile is not accessible')
+      expect(ctx.stderr).to.contain(constants.ERR_META_NOT_REACHABLE.message)
     })
 
   test
@@ -116,11 +115,11 @@ describe('join', () => {
     .stderr()
     .command(['join', '-m', './test/files/test.object'])
     .catch((error) => {
-      expect(error.message).to.equal('unsupported metadata Type')
+      expect(error).to.equal(constants.ERR_META_NOT_SUPPORT)
     })
     .it('runs join unsupported metadata type', (ctx) => {
       expect(process.exit()).to.equal('foobar')
-      expect(ctx.stderr).to.contain('unsupported metadata Type')
+      expect(ctx.stderr).to.contain(constants.ERR_META_NOT_SUPPORT.message)
     })
 
   test
@@ -134,11 +133,11 @@ describe('join', () => {
       './test/files/package1.xml',
     ])
     .catch((error) => {
-      expect(error.message).to.equal('multiple metadataTypes given as input')
+      expect(error).to.equal(constants.ERR_META_MULTI)
     })
     .it('runs join multiple different metadataTypes', (ctx) => {
       expect(process.exit()).to.equal('foobar')
-      expect(ctx.stderr).to.contain('multiple metadataTypes given as input')
+      expect(ctx.stderr).to.contain(constants.ERR_META_MULTI.message)
     })
 
   test
