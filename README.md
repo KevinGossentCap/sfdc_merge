@@ -150,7 +150,7 @@ USAGE
 OPTIONS
   -a, --algo=latest|meld  [default: latest] algorithm for join, latest or meld
   -h, --help              show CLI help
-  -m, --meta=meta         path(s) to file(s) to join
+  -m, --meta=meta         (required) path(s) to file(s) to join
   -o, --output=output     path to write output
   -v, --verbose           verbose mode
 ```
@@ -187,7 +187,7 @@ USAGE
 
 OPTIONS
   -h, --help       show CLI help
-  -m, --meta=meta  path(s) to file(s) to sort
+  -m, --meta=meta  (required) path(s) to file(s) to sort
   -v, --verbose    verbose mode
 ```
 

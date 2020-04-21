@@ -12,6 +12,7 @@ export default class Sort extends Command {
       char: 'm',
       description: 'path(s) to file(s) to sort',
       multiple: true,
+      required: true,
     }),
     verbose: flags.boolean({
       char: 'v',
@@ -24,11 +25,6 @@ export default class Sort extends Command {
     startTimer(flags.verbose, constants.steps.global)
 
     startTimer(flags.verbose, constants.steps.inputs)
-    if (flags.meta === undefined) {
-      console.error('list of permissions to merge is empty')
-      endTimer(flags.verbose, constants.steps.global)
-      throw new Error('list of permissions to merge is empty')
-    }
     await allFilesExist(flags.meta).catch(() => {
       console.error(constants.ERR_META_NOT_REACHABLE.message)
       endTimer(flags.verbose, constants.steps.global)

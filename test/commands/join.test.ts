@@ -93,9 +93,16 @@ describe('join', () => {
     .stub(process, 'exit', () => 'foobar')
     .stderr()
     .command(['join'])
-    .it('runs join with no file', (ctx) => {
+    .catch((error) => {
+      expect(error.message)
+        .to.contain('Missing required flag:')
+        .to.contain('-m, --meta META')
+        .to.contain('path(s) to file(s) to join')
+      // expect(error.message).to.contain('-m, --meta META  \u001b[2mpath(s) to file(s) to join\u001b[22m')
+    })
+    .it('runs join with no file', (_ctx) => {
       expect(process.exit()).to.equal('foobar')
-      expect(ctx.stderr).to.contain('list of permissions to merge is empty')
+      // expect(ctx.stderr).to.contain('list of permissions to merge is empty')
     })
 
   test
@@ -103,7 +110,7 @@ describe('join', () => {
     .stderr()
     .command(['join', '-m', './test/files/non_existing.profile-meta.xml'])
     .catch((error) => {
-      expect(error).to.equal(constants.ERR_META_NOT_REACHABLE)
+      expect(error.message).to.equal(constants.ERR_META_NOT_REACHABLE.message)
     })
     .it('runs join with inexisting file', (ctx) => {
       expect(process.exit()).to.equal('foobar')
@@ -115,7 +122,7 @@ describe('join', () => {
     .stderr()
     .command(['join', '-m', './test/files/test.object'])
     .catch((error) => {
-      expect(error).to.equal(constants.ERR_META_NOT_SUPPORT)
+      expect(error.message).to.equal(constants.ERR_META_NOT_SUPPORT.message)
     })
     .it('runs join unsupported metadata type', (ctx) => {
       expect(process.exit()).to.equal('foobar')
@@ -133,7 +140,7 @@ describe('join', () => {
       './test/files/package1.xml',
     ])
     .catch((error) => {
-      expect(error).to.equal(constants.ERR_META_MULTI)
+      expect(error.message).to.equal(constants.ERR_META_MULTI.message)
     })
     .it('runs join multiple different metadataTypes', (ctx) => {
       expect(process.exit()).to.equal('foobar')

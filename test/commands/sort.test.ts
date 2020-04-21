@@ -18,9 +18,18 @@ describe('sort', () => {
     .stub(process, 'exit', () => 'foobar')
     .stderr()
     .command(['sort'])
-    .it('runs sort with no file', (ctx) => {
+    .catch((error) => {
+      expect(error.message)
+        .to.contain('Missing required flag:')
+        .to.contain('-m, --meta META')
+        .to.contain('path(s) to file(s) to sort')
+      // expect(error.message).to.contain('Missing required flag:')
+      // expect(error.message).to.contain('-m, --meta META')
+      // expect(error.message).to.contain('path(s) to file(s) to sort')
+    })
+    .it('runs sort with no file', (_ctx) => {
       expect(process.exit()).to.equal('foobar')
-      expect(ctx.stderr).to.contain('list of permissions to merge is empty')
+      // expect(ctx.stderr).to.contain('list of permissions to merge is empty')
     })
 
   test
@@ -28,7 +37,7 @@ describe('sort', () => {
     .stderr()
     .command(['sort', '-m', './test/files/non_existing.profile-meta.xml'])
     .catch((error) => {
-      expect(error.message).to.equal(constants.ERR_META_NOT_REACHABLE)
+      expect(error.message).to.equal(constants.ERR_META_NOT_REACHABLE.message)
     })
     .it('runs sort with inexisting file', (ctx) => {
       expect(process.exit()).to.equal('foobar')

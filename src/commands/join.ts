@@ -19,6 +19,7 @@ export default class Join extends Command {
       char: 'm',
       description: 'path(s) to file(s) to join',
       multiple: true,
+      required: true,
     }),
     output: flags.string({
       char: 'o',
@@ -41,11 +42,6 @@ export default class Join extends Command {
     startTimer(flags.verbose, constants.steps.global)
 
     startTimer(flags.verbose, constants.steps.inputs)
-    if (flags.meta === undefined) {
-      console.error('list of permissions to merge is empty')
-      endTimer(flags.verbose, constants.steps.global)
-      throw new Error('list of permissions to merge is empty')
-    }
     await allFilesExist(flags.meta).catch(() => {
       console.error(constants.ERR_META_NOT_REACHABLE.message)
       endTimer(flags.verbose, constants.steps.global)
