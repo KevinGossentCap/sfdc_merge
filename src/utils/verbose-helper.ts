@@ -4,26 +4,36 @@ export function addVerboseInfo(verbose: boolean, ...args): void {
 
 // verbose: boolean, strStep: string
 // level: number, expected: number, strStep: string
-export function startTimer(...args) {
-  switch (args.length) {
-    case 2:
-      if (args[0]) console.time(args[1])
-      break
-    case 3:
-      if (args[0] >= args[1]) console.time(args[2])
-      break
+export function startTimer(strStep: string, verbose: boolean): void
+export function startTimer(
+  strStep: string,
+  verbose: number,
+  expected: number,
+): void
+export function startTimer(
+  strStep?: string,
+  verbose?: boolean | number,
+  expected?: number,
+) {
+  if ((typeof verbose === 'boolean' && verbose) || verbose >= expected) {
+    console.time(strStep)
   }
 }
 
 // verbose: boolean, strStep: string
 // level: number, expected: number, strStep: string
-export function endTimer(...args) {
-  switch (args.length) {
-    case 2:
-      if (args[0]) console.timeEnd(args[1])
-      break
-    case 3:
-      if (args[0] >= args[1]) console.timeEnd(args[2])
-      break
+export function endTimer(strStep: string, verbose: boolean): void
+export function endTimer(
+  strStep: string,
+  verbose: number,
+  expected: number,
+): void
+export function endTimer(
+  strStep?: string,
+  verbose?: boolean | number,
+  expected?: number,
+): void {
+  if ((typeof verbose === 'boolean' && verbose) || verbose >= expected) {
+    console.timeEnd(strStep)
   }
 }

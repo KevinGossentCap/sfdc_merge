@@ -16,4 +16,8 @@ export const constants = Object.freeze({
       writeFile: 'writing keyed time',
     },
   },
+  success: {
+    join: 'successfully joined',
+    sort: 'successfully sorted',
+  },
 })

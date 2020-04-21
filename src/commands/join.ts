@@ -44,18 +44,18 @@ export default class Join extends Command {
 
   async run() {
     const {flags} = this.parse(Join)
-    startTimer(flags.verbose, constants.steps.global)
+    startTimer(constants.steps.global, flags.verbose)
 
-    startTimer(flags.verbose, constants.steps.inputs)
+    startTimer(constants.steps.inputs, flags.verbose)
     if (flags.verbose && !flags.loglevel) flags.loglevel = 1
     await allFilesExist(flags.meta).catch(() => {
       console.error(constants.ERR_META_NOT_REACHABLE.message)
-      endTimer(flags.verbose, constants.steps.global)
+      endTimer(constants.steps.global, flags.verbose)
       throw constants.ERR_META_NOT_REACHABLE
     })
-    endTimer(flags.verbose, constants.steps.inputs)
+    endTimer(constants.steps.inputs, flags.verbose)
 
-    startTimer(flags.verbose, constants.steps.join.getMeta)
+    startTimer(constants.steps.join.getMeta, flags.verbose)
     let meta
     await getMetadataType(flags.meta)
       .then((result) => {
@@ -64,12 +64,12 @@ export default class Join extends Command {
       })
       .catch((error) => {
         console.error(error.message)
-        endTimer(flags.verbose, constants.steps.global)
+        endTimer(constants.steps.global, flags.verbose)
         throw error
       })
-    endTimer(flags.verbose, constants.steps.join.getMeta)
+    endTimer(constants.steps.join.getMeta, flags.verbose)
 
-    startTimer(flags.verbose, constants.steps.join.getConf)
+    startTimer(constants.steps.join.getConf, flags.verbose)
     let configJson
     await getMetaConfigJSON(meta)
       .then((result) => {
@@ -77,12 +77,12 @@ export default class Join extends Command {
       })
       .catch(() => {
         console.error(constants.ERR_META_NOT_SUPPORT.message, meta)
-        endTimer(flags.verbose, constants.steps.global)
+        endTimer(constants.steps.global, flags.verbose)
         throw constants.ERR_META_NOT_SUPPORT
       })
-    endTimer(flags.verbose, constants.steps.join.getConf)
+    endTimer(constants.steps.join.getConf, flags.verbose)
 
-    startTimer(flags.verbose, constants.steps.join.getFiles)
+    startTimer(constants.steps.join.getFiles, flags.verbose)
     let fileKeyedJSON
     await getKeyedFiles(flags.meta, meta, configJson, flags.loglevel)
       .then((result) => {
@@ -92,9 +92,9 @@ export default class Join extends Command {
         console.error(error)
         throw error
       })
-    endTimer(flags.verbose, constants.steps.join.getFiles)
+    endTimer(constants.steps.join.getFiles, flags.verbose)
 
-    startTimer(flags.verbose, constants.steps.join.joinFiles)
+    startTimer(constants.steps.join.joinFiles, flags.verbose)
     const reducerKeyedLatest = function (acc, curr) {
       // first loop we will use the current Permission => no merge required :D
       if (Object.entries(acc).length === 0 && acc.constructor === Object) {
@@ -169,9 +169,9 @@ export default class Join extends Command {
     } else {
       mergedKeyed = fileKeyedJSON.reduce(reducerKeyedmeld, [])
     }
-    endTimer(flags.verbose, constants.steps.join.joinFiles)
+    endTimer(constants.steps.join.joinFiles, flags.verbose)
 
-    startTimer(flags.verbose, constants.steps.join.unKeyFiles)
+    startTimer(constants.steps.join.unKeyFiles, flags.verbose)
     const unKeyed = {}
     Object.keys(mergedKeyed)
       .sort()
@@ -186,13 +186,13 @@ export default class Join extends Command {
           unKeyed[mergedKeyed[key].nodeType] = mergedKeyed[key].node
         }
       })
-    endTimer(flags.verbose, constants.steps.join.unKeyFiles)
+    endTimer(constants.steps.join.unKeyFiles, flags.verbose)
 
-    startTimer(flags.verbose, constants.steps.join.writeFile)
+    startTimer(constants.steps.join.writeFile, flags.verbose)
     await writeOutput(meta, flags.output, unKeyed)
-    endTimer(flags.verbose, constants.steps.join.writeFile)
+    endTimer(constants.steps.join.writeFile, flags.verbose)
 
-    endTimer(flags.verbose, constants.steps.global)
-    console.log('sfdx-md-merge-driver:', 'successfully joined.')
+    endTimer(constants.steps.global, flags.verbose)
+    console.log('sfdx-md-merge-driver:', constants.success.join)
   }
 }

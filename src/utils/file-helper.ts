@@ -97,44 +97,44 @@ export async function getKeyedFiles(
   return Promise.all(
     files.map((file, index) => {
       startTimer(
-        level,
-        2,
         'file: ' +
           file +
           ' index: ' +
           index.toString().padStart(3) +
           ' reading',
+        level,
+        2,
       )
       return fsp
         .readFile(file, {flag: 'r', encoding: 'utf8'})
         .then((data) => {
           endTimer(
-            level,
-            2,
             'file: ' +
               file +
               ' index: ' +
               index.toString().padStart(3) +
               ' reading',
-          )
-          startTimer(
             level,
             2,
+          )
+          startTimer(
             'file: ' +
               file +
               ' index: ' +
               index.toString().padStart(3) +
               ' parsing xml',
+            level,
+            2,
           )
           const xmljsResult = xmljs.xml2js(data, optXml2js)
           endTimer(
-            level,
-            2,
             'file: ' +
               file +
               ' index: ' +
               index.toString().padStart(3) +
               ' parsing xml',
+            level,
+            2,
           )
           return xmljsResult
         })
@@ -146,13 +146,13 @@ export async function getKeyedFiles(
         })
         .then((data) => {
           startTimer(
-            level,
-            2,
             'file: ' +
               file +
               ' index: ' +
               index.toString().padStart(3) +
               ' keying',
+            level,
+            2,
           )
           const keyedTab = []
           for (const localType of Object.keys(data)) {
@@ -173,13 +173,13 @@ export async function getKeyedFiles(
             Object.assign(keyedTab, result)
           }
           endTimer(
-            level,
-            2,
             'file: ' +
               file +
               ' index: ' +
               index.toString().padStart(3) +
               ' keying',
+            level,
+            2,
           )
           return keyedTab
         })
@@ -203,53 +203,53 @@ export async function doReadWrite(files: string[], level: number) {
   return Promise.all(
     files.map((file, index) => {
       startTimer(
-        level,
-        2,
         'file: ' +
           file +
           ' index: ' +
           index.toString().padStart(3) +
           ' reading',
+        level,
+        2,
       )
       return fsp
         .readFile(file, {flag: 'r', encoding: 'utf8'})
         .then((data) => {
           endTimer(
-            level,
-            2,
             'file: ' +
               file +
               ' index: ' +
               index.toString().padStart(3) +
               ' reading',
-          )
-          startTimer(
             level,
             2,
+          )
+          startTimer(
             'file: ' +
               file +
               ' index: ' +
               index.toString().padStart(3) +
               ' parsing xml',
+            level,
+            2,
           )
           const xmljsResult = xmljs.xml2js(data, optXml2js)
           endTimer(
-            level,
-            2,
             'file: ' +
               file +
               ' index: ' +
               index.toString().padStart(3) +
               ' parsing xml',
+            level,
+            2,
           )
           return xmljsResult
         })
         .then((data) => {
-          startTimer(level, 1, constants.steps.join.writeFile)
+          startTimer(constants.steps.join.writeFile, level, 1)
           fsp.writeFile(file, xmljs.js2xml(data, optJs2xml).concat('\n'), {
             encoding: 'utf8',
           })
-          endTimer(level, 1, constants.steps.join.writeFile)
+          endTimer(constants.steps.join.writeFile, level, 1)
         })
     }),
   )

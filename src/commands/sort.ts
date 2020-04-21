@@ -27,20 +27,20 @@ export default class Sort extends Command {
 
   async run() {
     const {flags} = this.parse(Sort)
-    startTimer(flags.verbose, constants.steps.global)
+    startTimer(constants.steps.global, flags.verbose)
 
-    startTimer(flags.verbose, constants.steps.inputs)
+    startTimer(constants.steps.inputs, flags.verbose)
     if (flags.verbose && !flags.loglevel) flags.loglevel = 1
     await allFilesExist(flags.meta).catch(() => {
       console.error(constants.ERR_META_NOT_REACHABLE.message)
-      endTimer(flags.verbose, constants.steps.global)
+      endTimer(constants.steps.global, flags.verbose)
       throw constants.ERR_META_NOT_REACHABLE
     })
-    endTimer(flags.verbose, constants.steps.inputs)
+    endTimer(constants.steps.inputs, flags.verbose)
 
     await doReadWrite(flags.meta, flags.loglevel)
 
-    endTimer(flags.verbose, constants.steps.global)
-    console.log('sfdx-md-merge-driver:', 'successfully sorted.')
+    endTimer(constants.steps.global, flags.verbose)
+    console.log('sfdx-md-merge-driver:', constants.success.sort)
   }
 }
