@@ -216,8 +216,8 @@ function deepSort(obj, configJson) {
   if (!Array.isArray(obj) && typeof obj === 'object') {
     for (const key of _.keys(obj)) {
       if (Array.isArray(obj[key])) {
-        if (configJson.mdnodes[key] && configJson.mdnodes[key].sortKeys) {
-          obj[key] = _.sortBy(obj[key], configJson.mdnodes[key].sortKeys)
+        if (configJson.mdnodes[key] && configJson.mdnodes[key].mdtype.keys) {
+          obj[key] = _.sortBy(obj[key], configJson.mdnodes[key].mdtype.keys)
         }
       } else if (!Array.isArray(obj[key]) && typeof obj[key] === 'object') {
         obj[key] = _.chain(obj[key]).toPairs().sortBy(0).fromPairs().value()
