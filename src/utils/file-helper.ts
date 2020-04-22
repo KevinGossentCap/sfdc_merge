@@ -6,6 +6,7 @@ import * as xmljs from 'xml-js'
 import {buildUniqueKey} from '../utils/merge-helper'
 import {startTimer, endTimer} from '../utils/verbose-helper'
 import {constants} from '../utils/constants'
+import * as _ from 'lodash'
 
 const fsp = fs.promises
 const regGenericMatch = /(?<=<)(\w+)(?= +xmlns)/
@@ -48,7 +49,8 @@ function getConfigPath(meta) {
     __dirname,
     '..',
     '..',
-    '/conf/merge-' + meta.toLowerCase() + '-config.json',
+    'conf',
+    'merge-' + meta.toLowerCase() + '-config.json',
   )
 }
 
@@ -199,7 +201,44 @@ export async function writeOutput(meta, file, jsonOutput) {
   }
 }
 
-export async function doReadWrite(files: string[], level: number) {
+export async function getGenericConfigJSON() {
+  return fsp
+    .readFile(path.join(__dirname, '..', '..', 'conf', 'generic-config.json'), {
+      flag: 'r',
+      encoding: 'utf8',
+    })
+    .then((data) => {
+      return JSON.parse(data)
+    })
+}
+
+function deepSort(obj, configJson) {
+  if (!Array.isArray(obj) && typeof obj === 'object') {
+    for (const key of _.keys(obj)) {
+      if (Array.isArray(obj[key])) {
+        if (configJson.mdnodes[key] && configJson.mdnodes[key].sortKeys) {
+          obj[key] = _.sortBy(obj[key], configJson.mdnodes[key].sortKeys)
+        }
+      } else if (!Array.isArray(obj[key]) && typeof obj[key] === 'object') {
+        obj[key] = _.chain(obj[key]).toPairs().sortBy(0).fromPairs().value()
+      }
+      deepSort(obj[key], configJson)
+    }
+  } else if (Array.isArray(obj)) {
+    for (let index = 0; index < obj.length; index++) {
+      if (!Array.isArray(obj[index]) && typeof obj[index] === 'object') {
+        obj[index] = _.chain(obj[index]).toPairs().sortBy(0).fromPairs().value()
+      }
+      deepSort(obj[index], configJson)
+    }
+  }
+}
+
+export async function doReadSortWrite(
+  files: string[],
+  level: number,
+  configJson: object,
+) {
   return Promise.all(
     files.map((file, index) => {
       startTimer(
@@ -242,6 +281,7 @@ export async function doReadWrite(files: string[], level: number) {
             level,
             2,
           )
+          deepSort(xmljsResult, configJson)
           return xmljsResult
         })
         .then((data) => {
