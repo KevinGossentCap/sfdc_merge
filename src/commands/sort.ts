@@ -2,7 +2,7 @@ import {Command, flags} from '@oclif/command'
 import {startTimer, endTimer} from '../utils/verbose-helper'
 import {allFilesExist, doReadSortWrite} from '../utils/file-helper'
 import {constants} from '../utils/constants'
-import {configJson} from '../utils/generic-config'
+// import {configJson} from '../utils/generic-meta-node'
 
 export default class Sort extends Command {
   static description = 'describe the command here'
@@ -46,7 +46,7 @@ export default class Sort extends Command {
     // })
     // endTimer(constants.steps.join.getConf, flags.verbose)
 
-    await doReadSortWrite(flags.meta, flags.loglevel, configJson)
+    await doReadSortWrite(flags.meta, flags.loglevel)
 
     endTimer(constants.steps.global, flags.verbose)
     console.log('sfdx-md-merge-driver:', constants.success.sort)

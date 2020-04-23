@@ -7,6 +7,7 @@ import {buildUniqueKey} from '../utils/merge-helper'
 import {startTimer, endTimer} from '../utils/verbose-helper'
 import {constants} from '../utils/constants'
 import * as _ from 'lodash'
+import {getSupportedMeta, getMetaConfig} from '../utils/generic-meta-node'
 
 const fsp = fs.promises
 const regGenericMatch = /(?<=<)(\w+)(?= +xmlns)/
@@ -204,8 +205,8 @@ function deepSort(obj, configJson) {
   if (!Array.isArray(obj) && typeof obj === 'object') {
     for (const key of _.keys(obj)) {
       if (Array.isArray(obj[key])) {
-        if (configJson.mdnodes[key] && configJson.mdnodes[key].mdtype.keys) {
-          obj[key] = _.sortBy(obj[key], configJson.mdnodes[key].mdtype.keys)
+        if (configJson[key] && configJson[key].mdtype.keys) {
+          obj[key] = _.sortBy(obj[key], configJson[key].mdtype.keys)
         }
       } else if (!Array.isArray(obj[key]) && typeof obj[key] === 'object') {
         obj[key] = _.chain(obj[key]).toPairs().sortBy(0).fromPairs().value()
@@ -222,11 +223,7 @@ function deepSort(obj, configJson) {
   }
 }
 
-export async function doReadSortWrite(
-  files: string[],
-  level: number,
-  configJson: object,
-) {
+export async function doReadSortWrite(files: string[], level: number) {
   return Promise.all(
     files.map((file, index) => {
       startTimer(
@@ -265,7 +262,37 @@ export async function doReadSortWrite(
             level,
             2,
           )
-          deepSort(xmljsResult, configJson)
+          startTimer(
+            [
+              'file:',
+              file,
+              'index:',
+              index.toString().padStart(3),
+              'sorting object',
+            ],
+            level,
+            2,
+          )
+          const match = data.match(regGenericMatch)
+          let meta
+          if (match !== null) {
+            meta = match[0]
+          }
+          if (!getSupportedMeta().includes(meta)) {
+            throw constants.ERR_META_NOT_SUPPORT
+          }
+          deepSort(xmljsResult, getMetaConfig(meta))
+          endTimer(
+            [
+              'file:',
+              file,
+              'index:',
+              index.toString().padStart(3),
+              'sorting object',
+            ],
+            level,
+            2,
+          )
           return xmljsResult
         })
         .then((data) => {
