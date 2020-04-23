@@ -95,9 +95,65 @@ const Profile = Object.freeze({
   },
 })
 
+const PermissionSet = Object.freeze({
+  applicationVisibilities: {
+    isArray: true,
+    mdtype: mdtypes.PermissionSetApplicationVisibility,
+  },
+  classAccesses: {
+    isArray: true,
+    mdtype: mdtypes.PermissionSetApexClassAccess,
+  },
+  customMetadataTypeAccesses: {
+    isArray: true,
+    mdtype: mdtypes.PermissionSetCustomMetadataTypeAccess,
+  },
+  customPermissions: {
+    isArray: true,
+    mdtype: mdtypes.PermissionSetCustomPermissions,
+  },
+  customSettingAccesses: {
+    isArray: true,
+    mdtype: mdtypes.PermissionSetCustomSettingAccesses,
+  },
+  description: {mdtype: mdtypes.String},
+  externalDataSourceAccesses: {
+    isArray: true,
+    mdtype: mdtypes.PermissionSetExternalDataSourceAccess,
+  },
+  fieldPermissions: {
+    isArray: true,
+    mdtype: mdtypes.PermissionSetFieldPermissions,
+  },
+  hasActivationRequired: {mdtype: mdtypes.String},
+  label: {mdtype: mdtypes.String},
+  license: {mdtype: mdtypes.String},
+  objectPermissions: {
+    isArray: true,
+    mdtype: mdtypes.PermissionSetObjectPermissions,
+  },
+  pageAccesses: {
+    isArray: true,
+    mdtype: mdtypes.PermissionSetApexPageAccess,
+  },
+  recordTypeVisibilities: {
+    isArray: true,
+    mdtype: mdtypes.PermissionSetRecordTypeVisibility,
+  },
+  tabSettings: {
+    isArray: true,
+    mdtype: mdtypes.PermissionSetTabSetting,
+  },
+  userPermissions: {
+    isArray: true,
+    mdtype: mdtypes.PermissionSetUserPermission,
+  },
+})
+
 export const fullMdConfig = Object.freeze({
   Package: Package,
   Profile: Profile,
+  PermissionSet: PermissionSet,
 })
 
 export function getSupportedMeta() {

@@ -61,6 +61,23 @@ const Profile = Object.freeze({
   ProfileUserPermission: {unicity: 'full', keys: ['name._']},
 })
 
+const PermissionSet = Object.freeze({
+  PermissionSetApplicationVisibility: Profile.ProfileApplicationVisibility,
+  PermissionSetApexClassAccess: Profile.ProfileApexClassAccess,
+  PermissionSetCustomMetadataTypeAccess:
+    Profile.ProfileCustomMetadataTypeAccess,
+  PermissionSetCustomPermissions: Profile.ProfileCustomPermissions,
+  PermissionSetCustomSettingAccesses: Profile.ProfileCustomSettingAccesses,
+  PermissionSetExternalDataSourceAccess:
+    Profile.ProfileExternalDataSourceAccess,
+  PermissionSetFieldPermissions: Profile.ProfileFieldLevelSecurity,
+  PermissionSetObjectPermissions: Profile.ProfileObjectPermissions,
+  PermissionSetApexPageAccess: Profile.ProfileApexPageAccess,
+  PermissionSetRecordTypeVisibility: Profile.ProfileRecordTypeVisibility,
+  PermissionSetTabSetting: Profile.ProfileTabVisibility,
+  PermissionSetUserPermission: Profile.ProfileUserPermission,
+})
+
 export const mdtypes = Object.freeze({
   String: String,
   PackageTypeMembers: Package.PackageTypeMembers,
@@ -82,4 +99,21 @@ export const mdtypes = Object.freeze({
   ProfileRecordTypeVisibility: Profile.ProfileRecordTypeVisibility,
   ProfileTabVisibility: Profile.ProfileTabVisibility,
   ProfileUserPermission: Profile.ProfileUserPermission,
+  PermissionSetApplicationVisibility:
+    PermissionSet.PermissionSetApplicationVisibility,
+  PermissionSetApexClassAccess: PermissionSet.PermissionSetApexClassAccess,
+  PermissionSetCustomMetadataTypeAccess:
+    PermissionSet.PermissionSetCustomMetadataTypeAccess,
+  PermissionSetCustomPermissions: PermissionSet.PermissionSetCustomPermissions,
+  PermissionSetCustomSettingAccesses:
+    PermissionSet.PermissionSetCustomSettingAccesses,
+  PermissionSetExternalDataSourceAccess:
+    PermissionSet.PermissionSetExternalDataSourceAccess,
+  PermissionSetFieldPermissions: PermissionSet.PermissionSetFieldPermissions,
+  PermissionSetObjectPermissions: PermissionSet.PermissionSetObjectPermissions,
+  PermissionSetApexPageAccess: PermissionSet.PermissionSetApexPageAccess,
+  PermissionSetRecordTypeVisibility:
+    PermissionSet.PermissionSetRecordTypeVisibility,
+  PermissionSetTabSetting: PermissionSet.PermissionSetTabSetting,
+  PermissionSetUserPermission: PermissionSet.PermissionSetUserPermission,
 })
