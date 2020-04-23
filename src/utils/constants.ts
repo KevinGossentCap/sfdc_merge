@@ -7,13 +7,13 @@ export const constants = Object.freeze({
   steps: {
     global: 'teatment time',
     inputs: 'input check time',
+    writeFile: 'write file time',
     join: {
       getMeta: 'get metadaType time',
       getConf: 'get config time',
       getFiles: 'get keyed files time',
       joinFiles: 'join keyed time',
       unKeyFiles: 'transform keyed to unkeyed',
-      writeFile: 'writing keyed time',
     },
   },
   success: {

@@ -99,11 +99,7 @@ export async function getKeyedFiles(
   return Promise.all(
     files.map((file, index) => {
       startTimer(
-        'file: ' +
-          file +
-          ' index: ' +
-          index.toString().padStart(3) +
-          ' reading',
+        ['file:', file, 'index:', index.toString().padStart(3), 'reading'],
         level,
         2,
       )
@@ -111,30 +107,30 @@ export async function getKeyedFiles(
         .readFile(file, {flag: 'r', encoding: 'utf8'})
         .then((data) => {
           endTimer(
-            'file: ' +
-              file +
-              ' index: ' +
-              index.toString().padStart(3) +
-              ' reading',
+            ['file:', file, 'index:', index.toString().padStart(3), 'reading'],
             level,
             2,
           )
           startTimer(
-            'file: ' +
-              file +
-              ' index: ' +
-              index.toString().padStart(3) +
-              ' parsing xml',
+            [
+              'file:',
+              file,
+              'index:',
+              index.toString().padStart(3),
+              'parsing xml',
+            ],
             level,
             2,
           )
           const xmljsResult = xmljs.xml2js(data, optXml2js)
           endTimer(
-            'file: ' +
-              file +
-              ' index: ' +
-              index.toString().padStart(3) +
-              ' parsing xml',
+            [
+              'file:',
+              file,
+              'index:',
+              index.toString().padStart(3),
+              'parsing xml',
+            ],
             level,
             2,
           )
@@ -148,11 +144,7 @@ export async function getKeyedFiles(
         })
         .then((data) => {
           startTimer(
-            'file: ' +
-              file +
-              ' index: ' +
-              index.toString().padStart(3) +
-              ' keying',
+            ['file:', file, 'index:', index.toString().padStart(3), 'keying'],
             level,
             2,
           )
@@ -175,11 +167,7 @@ export async function getKeyedFiles(
             Object.assign(keyedTab, result)
           }
           endTimer(
-            'file: ' +
-              file +
-              ' index: ' +
-              index.toString().padStart(3) +
-              ' keying',
+            ['file:', file, 'index:', index.toString().padStart(3), 'keying'],
             level,
             2,
           )
@@ -242,11 +230,7 @@ export async function doReadSortWrite(
   return Promise.all(
     files.map((file, index) => {
       startTimer(
-        'file: ' +
-          file +
-          ' index: ' +
-          index.toString().padStart(3) +
-          ' reading',
+        ['file:', file, 'index:', index.toString().padStart(3), 'reading'],
         level,
         2,
       )
@@ -254,30 +238,30 @@ export async function doReadSortWrite(
         .readFile(file, {flag: 'r', encoding: 'utf8'})
         .then((data) => {
           endTimer(
-            'file: ' +
-              file +
-              ' index: ' +
-              index.toString().padStart(3) +
-              ' reading',
+            ['file:', file, 'index:', index.toString().padStart(3), 'reading'],
             level,
             2,
           )
           startTimer(
-            'file: ' +
-              file +
-              ' index: ' +
-              index.toString().padStart(3) +
-              ' parsing xml',
+            [
+              'file:',
+              file,
+              'index:',
+              index.toString().padStart(3),
+              'parsing xml',
+            ],
             level,
             2,
           )
           const xmljsResult = xmljs.xml2js(data, optXml2js)
           endTimer(
-            'file: ' +
-              file +
-              ' index: ' +
-              index.toString().padStart(3) +
-              ' parsing xml',
+            [
+              'file:',
+              file,
+              'index:',
+              index.toString().padStart(3),
+              'parsing xml',
+            ],
             level,
             2,
           )
@@ -285,11 +269,11 @@ export async function doReadSortWrite(
           return xmljsResult
         })
         .then((data) => {
-          startTimer(constants.steps.join.writeFile, level, 1)
+          startTimer(constants.steps.writeFile, level, 1)
           fsp.writeFile(file, xmljs.js2xml(data, optJs2xml).concat('\n'), {
             encoding: 'utf8',
           })
-          endTimer(constants.steps.join.writeFile, level, 1)
+          endTimer(constants.steps.writeFile, level, 1)
         })
     }),
   )

@@ -31,6 +31,17 @@ describe('sort', () => {
 
   test
     .stub(process, 'exit', () => 'foobar')
+    .stderr()
+    .command(['sort', '-m', './test/files/test.inexistantmeta'])
+    .catch((error) => {
+      expect(error.message).to.equal(constants.ERR_META_NOT_SUPPORT.message)
+    })
+    .it('runs sort unsupported metadata type', (_ctx) => {
+      expect(process.exit()).to.equal('foobar')
+    })
+
+  test
+    .stub(process, 'exit', () => 'foobar')
     .stdout()
     .command(['sort', '-m', './test/files/package1.xml', '-v'])
     .it('runs sort verbose', (ctx) => {

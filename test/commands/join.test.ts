@@ -33,7 +33,7 @@ describe('join', () => {
   test
     .stub(process, 'exit', () => 'foobar')
     .stderr()
-    .command(['join', '-m', './test/files/test.object'])
+    .command(['join', '-m', './test/files/test.inexistantmeta'])
     .catch((error) => {
       expect(error.message).to.equal(constants.ERR_META_NOT_SUPPORT.message)
     })
