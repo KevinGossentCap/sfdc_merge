@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml encoding="UTF-8" version="1.0"?>
 <Profile xmlns="http://soap.sforce.com/2006/04/metadata">
     <applicationVisibilities>
         <application>Weasy_Console</application>
@@ -12388,6 +12388,10 @@
         <layout>Account-Account Layout</layout>
     </layoutAssignments>
     <layoutAssignments>
+        <layout>Account-Account Layout</layout>
+        <recordType>Account.Test_Account_RT</recordType>
+    </layoutAssignments>
+    <layoutAssignments>
         <layout>Account-Account Layout Weasy C</layout>
         <recordType>Account.Customer</recordType>
     </layoutAssignments>
@@ -12396,16 +12400,16 @@
         <recordType>Account.ECOM_Client</recordType>
     </layoutAssignments>
     <layoutAssignments>
-        <layout>Account-Account Layout</layout>
-        <recordType>Account.Test_Account_RT</recordType>
+        <layout>Account-Address Layout Weasy Console</layout>
+        <recordType>Account.WZ_Construction_Site_Address</recordType>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Account-Address Layout Weasy Console</layout>
+        <recordType>Account.WZ_Shipping_Address</recordType>
     </layoutAssignments>
     <layoutAssignments>
         <layout>Account-Competitor Layout Weasy C</layout>
         <recordType>Account.WZ_Competitor</recordType>
-    </layoutAssignments>
-    <layoutAssignments>
-        <layout>Account-Address Layout Weasy Console</layout>
-        <recordType>Account.WZ_Construction_Site_Address</recordType>
     </layoutAssignments>
     <layoutAssignments>
         <layout>Account-Presciber Page Layout Weasy C</layout>
@@ -12416,18 +12420,10 @@
         <recordType>Account.WZ_Prospect</recordType>
     </layoutAssignments>
     <layoutAssignments>
-        <layout>Account-Address Layout Weasy Console</layout>
-        <recordType>Account.WZ_Shipping_Address</recordType>
-    </layoutAssignments>
-    <layoutAssignments>
         <layout>AccountTeamMember-Account Team Member Layout</layout>
     </layoutAssignments>
     <layoutAssignments>
         <layout>Case-Case Layout Weasy C</layout>
-    </layoutAssignments>
-    <layoutAssignments>
-        <layout>CaseClose-Close Case Layout Weasy C</layout>
-        <recordType>Case.Request</recordType>
     </layoutAssignments>
     <layoutAssignments>
         <layout>Case-Support Weasy Admin</layout>
@@ -12435,6 +12431,10 @@
     </layoutAssignments>
     <layoutAssignments>
         <layout>CaseClose-Close Case Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>CaseClose-Close Case Layout Weasy C</layout>
+        <recordType>Case.Request</recordType>
     </layoutAssignments>
     <layoutAssignments>
         <layout>Competition__c-Competition Layout Console</layout>
@@ -12541,11 +12541,11 @@
         <layout>OpeningHours__c-Opening Hours Layout</layout>
     </layoutAssignments>
     <layoutAssignments>
-        <layout>Opportunity-Opportunity Layout Console Weasy</layout>
-    </layoutAssignments>
-    <layoutAssignments>
         <layout>Opportunity-Opportunity Downstream Weasy C</layout>
         <recordType>Opportunity.Downstream_Opportunity</recordType>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Opportunity-Opportunity Layout Console Weasy</layout>
     </layoutAssignments>
     <layoutAssignments>
         <layout>Opportunity-Opportunity Layout Console Weasy</layout>
@@ -12762,11 +12762,11 @@
         <layout>WZ_Participants__c-Partcipant Layout Weasy Console</layout>
     </layoutAssignments>
     <layoutAssignments>
-        <layout>WZ_Product__c-Product Layout</layout>
-    </layoutAssignments>
-    <layoutAssignments>
         <layout>WZ_Product__c-Processed Product Layout Weasy C</layout>
         <recordType>WZ_Product__c.WZ_Processed_Product</recordType>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>WZ_Product__c-Product Layout</layout>
     </layoutAssignments>
     <layoutAssignments>
         <layout>WZ_Product__c-Upstream Product Layout Weasy C</layout>
@@ -12779,9 +12779,6 @@
         <layout>WZ_Project_Player__c-Project Player Facade Weasy C</layout>
     </layoutAssignments>
     <layoutAssignments>
-        <layout>WZ_Project__c-Project Layout Console</layout>
-    </layoutAssignments>
-    <layoutAssignments>
         <layout>WZ_Project__c-Contact Business Project Weasy C</layout>
         <recordType>WZ_Project__c.WZ_Contact_Business_Project</recordType>
     </layoutAssignments>
@@ -12791,10 +12788,10 @@
     </layoutAssignments>
     <layoutAssignments>
         <layout>WZ_Project__c-Project Layout Console</layout>
-        <recordType>WZ_Project__c.WZ_History_Project</recordType>
     </layoutAssignments>
     <layoutAssignments>
-        <layout>WZ_Prospect_Form__c-Prospect Form Layout</layout>
+        <layout>WZ_Project__c-Project Layout Console</layout>
+        <recordType>WZ_Project__c.WZ_History_Project</recordType>
     </layoutAssignments>
     <layoutAssignments>
         <layout>WZ_Prospect_Form__c-Prospect FORM BE</layout>
@@ -12805,16 +12802,23 @@
         <recordType>WZ_Prospect_Form__c.Prospect_FORM_CZ_SK</recordType>
     </layoutAssignments>
     <layoutAssignments>
-        <layout>WZ_Prospect_Form__c-Prospect Form DE Weasy C</layout>
-        <recordType>WZ_Prospect_Form__c.Prospect_FORM_DE</recordType>
-    </layoutAssignments>
-    <layoutAssignments>
         <layout>WZ_Prospect_Form__c-Prospect FORM FR</layout>
         <recordType>WZ_Prospect_Form__c.Prospect_FORM_FR</recordType>
     </layoutAssignments>
     <layoutAssignments>
         <layout>WZ_Prospect_Form__c-Prospect FORM PL</layout>
         <recordType>WZ_Prospect_Form__c.Prospect_FORM_PL</recordType>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>WZ_Prospect_Form__c-Prospect Form DE Weasy C</layout>
+        <recordType>WZ_Prospect_Form__c.Prospect_FORM_DE</recordType>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>WZ_Prospect_Form__c-Prospect Form Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>WZ_Prospect_Form__c-Prospect Form NL Weasy C</layout>
+        <recordType>WZ_Prospect_Form__c.WZ_Prospect_Form_NL</recordType>
     </layoutAssignments>
     <layoutAssignments>
         <layout>WZ_Prospect_Form__c-Prospect Form NO Weasy C</layout>
@@ -12829,15 +12833,11 @@
         <recordType>WZ_Prospect_Form__c.WZ_Prospect_FORM_SW</recordType>
     </layoutAssignments>
     <layoutAssignments>
-        <layout>WZ_Prospect_Form__c-Prospect Form NL Weasy C</layout>
-        <recordType>WZ_Prospect_Form__c.WZ_Prospect_Form_NL</recordType>
+        <layout>WZ_Quote__c-Quote Layout ERP Weasy C</layout>
+        <recordType>WZ_Quote__c.WZ_ERP_Quotes</recordType>
     </layoutAssignments>
     <layoutAssignments>
         <layout>WZ_Quote__c-Quote Layout weasy C</layout>
-    </layoutAssignments>
-    <layoutAssignments>
-        <layout>WZ_Quote__c-Quote Layout ERP Weasy C</layout>
-        <recordType>WZ_Quote__c.WZ_ERP_Quotes</recordType>
     </layoutAssignments>
     <layoutAssignments>
         <layout>WZ_Quote__c-Quote Layout weasy C</layout>

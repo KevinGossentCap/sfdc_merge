@@ -206,7 +206,23 @@ function deepSort(obj, configJson) {
     for (const key of _.keys(obj)) {
       if (Array.isArray(obj[key])) {
         if (configJson[key] && configJson[key].mdtype.keys) {
-          obj[key] = _.sortBy(obj[key], configJson[key].mdtype.keys)
+          obj[key] = _.sortBy(obj[key], [
+            (o) => {
+              if (configJson[key].mdtype.unicity !== 'exclusive') {
+                return configJson[key].mdtype.keys
+              }
+              let uniq = ''
+              for (let i = 0; i < configJson[key].mdtype.keys.length; i++) {
+                const tmp = String(_.get(o, configJson[key].mdtype.keys[i]))
+                if (tmp === 'undefined') {
+                  uniq += '!'
+                } else {
+                  uniq += tmp.replace(/ /g, '#') + '!'
+                }
+              }
+              return uniq
+            },
+          ])
         }
       } else if (!Array.isArray(obj[key]) && typeof obj[key] === 'object') {
         obj[key] = _.chain(obj[key]).toPairs().sortBy(0).fromPairs().value()

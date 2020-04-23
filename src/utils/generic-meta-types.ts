@@ -25,7 +25,7 @@ const Profile = Object.freeze({
   flowAccesses: {unicity: 'full', keys: ['flow._']},
   ProfileLayoutAssignments: {
     unicity: 'exclusive',
-    keys: ['recordType._', 'layout._'],
+    keys: ['layout._', 'recordType._'],
   },
   ProfileLoginHours: {
     unicity: 'exclusive',
