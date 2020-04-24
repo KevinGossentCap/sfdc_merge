@@ -98,7 +98,7 @@ describe('join', () => {
       '-m',
       './test/files/package1.xml',
       '-o',
-      './test/files/package2.xml',
+      './test/files/package3.xml',
       '-v',
     ])
     .it('runs join verbose', (ctx) => {
@@ -114,7 +114,7 @@ describe('join', () => {
       '-m',
       './test/files/package1.xml',
       '-o',
-      './test/files/package2.xml',
+      './test/files/package3.xml',
       '-v',
       '-l',
       '2',
