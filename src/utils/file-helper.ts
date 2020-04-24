@@ -210,7 +210,7 @@ function deepSort(obj, configJson) {
             obj[key],
             configJson[key].mdtype.keys.map((s) => {
               return (r: any) => {
-                return r[s] ? r[s] : ''
+                return _.get(r, s) ? _.get(r, s) : ''
               }
             }),
           )
