@@ -3,7 +3,7 @@ import {
   getMetadataType,
   getMetaConfigJSON,
   getKeyedFiles,
-  writeOutput,
+  writeOutputBased,
   allFilesExist,
 } from '../utils/file-helper'
 import {addVerboseInfo, startTimer, endTimer} from '../utils/verbose-helper'
@@ -189,7 +189,7 @@ export default class Join extends Command {
     endTimer(constants.steps.join.unKeyFiles, flags.verbose)
 
     startTimer(constants.steps.writeFile, flags.verbose)
-    await writeOutput(meta, flags.output, unKeyed)
+    await writeOutputBased(meta, flags.output, unKeyed)
     endTimer(constants.steps.writeFile, flags.verbose)
 
     endTimer(constants.steps.global, flags.verbose)

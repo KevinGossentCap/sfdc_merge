@@ -11,7 +11,9 @@ export const constants = Object.freeze({
     join: {
       getMeta: 'get metadaType time',
       getConf: 'get config time',
-      getFiles: 'get keyed files time',
+      getFiles: 'get files time',
+      parseFiles: 'parse files time',
+      keyFiles: 'keying files time',
       joinFiles: 'join keyed time',
       unKeyFiles: 'transform keyed to unkeyed',
     },

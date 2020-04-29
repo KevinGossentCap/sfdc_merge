@@ -13,6 +13,7 @@ const fsp = fs.promises
 const regGenericMatch = /(?<=<)(\w+)(?= +xmlns)/
 const optXml2js = {compact: true, textKey: '_', attributesKey: '$'}
 const optJs2xml = {compact: true, textKey: '_', attributesKey: '$', spaces: 4}
+const finalKeys = ['$', '_']
 
 // const builder = new xml2js.Builder({
 //   xmldec: {version: '1.0', encoding: 'UTF-8'},
@@ -149,6 +150,7 @@ export async function getKeyedFiles(
             level,
             2,
           )
+          // console.dir(data, {depth: null})
           const keyedTab = []
           for (const localType of Object.keys(data)) {
             const result = []
@@ -178,7 +180,7 @@ export async function getKeyedFiles(
   )
 }
 
-export async function writeOutput(meta, file, jsonOutput) {
+export async function writeOutputBased(meta, file, jsonOutput) {
   const base = getNodeBaseJSON(meta)
   Object.assign(base[meta], jsonOutput)
   if (file !== undefined && file !== '') {
@@ -187,6 +189,16 @@ export async function writeOutput(meta, file, jsonOutput) {
     })
   } else {
     console.log('joined:', JSON.stringify(base))
+  }
+}
+
+export async function writeOutput(meta, file, jsonOutput) {
+  if (file !== undefined && file !== '') {
+    fsp.writeFile(file, xmljs.js2xml(jsonOutput, optJs2xml).concat('\n'), {
+      encoding: 'utf8',
+    })
+  } else {
+    console.log('joined:', JSON.stringify(jsonOutput))
   }
 }
 
@@ -201,31 +213,31 @@ export async function getGenericConfigJSON() {
     })
 }
 
+function sorter(s) {
+  return (r: any) => {
+    return _.get(r, s, '')
+  }
+}
+
 function deepSort(obj, configJson) {
-  if (!Array.isArray(obj) && typeof obj === 'object') {
+  if (typeof obj === 'object') {
     for (const key of _.keys(obj)) {
-      if (Array.isArray(obj[key])) {
-        if (configJson[key] && configJson[key].mdtype.keys) {
+      if (finalKeys.includes(key)) continue
+      if (configJson[key] && configJson[key].mdtype.keys) {
+        if (configJson[key].isArray) {
+          // eslint-disable-next-line max-depth
+          if (!Array.isArray(obj[key])) obj[key] = [obj[key]]
           obj[key] = _.sortBy(
             obj[key],
-            configJson[key].mdtype.keys.map((s) => {
-              return (r: any) => {
-                return _.get(r, s) ? _.get(r, s) : ''
-              }
-            }),
+            configJson[key].mdtype.keys.map((s) => sorter(s)),
           )
+        } else {
+          obj[key] = _.chain(obj[key]).toPairs().sortBy(0).fromPairs().value()
         }
-      } else if (!Array.isArray(obj[key]) && typeof obj[key] === 'object') {
-        obj[key] = _.chain(obj[key]).toPairs().sortBy(0).fromPairs().value()
+        deepSort(obj[key], configJson)
+      } else {
+        deepSort(obj[key], configJson)
       }
-      deepSort(obj[key], configJson)
-    }
-  } else if (Array.isArray(obj)) {
-    for (let index = 0; index < obj.length; index++) {
-      if (!Array.isArray(obj[index]) && typeof obj[index] === 'object') {
-        obj[index] = _.chain(obj[index]).toPairs().sortBy(0).fromPairs().value()
-      }
-      deepSort(obj[index], configJson)
     }
   }
 }
@@ -241,6 +253,14 @@ export async function doReadSortWrite(files: string[], level: number) {
       return fsp
         .readFile(file, {flag: 'r', encoding: 'utf8'})
         .then((data) => {
+          const match = data.match(regGenericMatch)
+          let meta
+          if (match !== null) {
+            meta = match[0]
+          }
+          if (!getSupportedMeta().includes(meta)) {
+            throw constants.ERR_META_NOT_SUPPORT
+          }
           endTimer(
             ['file:', file, 'index:', index.toString().padStart(3), 'reading'],
             level,
@@ -280,14 +300,6 @@ export async function doReadSortWrite(files: string[], level: number) {
             level,
             2,
           )
-          const match = data.match(regGenericMatch)
-          let meta
-          if (match !== null) {
-            meta = match[0]
-          }
-          if (!getSupportedMeta().includes(meta)) {
-            throw constants.ERR_META_NOT_SUPPORT
-          }
           deepSort(xmljsResult, getMetaConfig(meta))
           endTimer(
             [
@@ -311,4 +323,126 @@ export async function doReadSortWrite(files: string[], level: number) {
         })
     }),
   )
+}
+
+export async function getFiles(files: string[], level: number) {
+  return Promise.all(
+    files.map((file, index) => {
+      startTimer(
+        ['file:', file, 'index:', index.toString().padStart(3), 'reading'],
+        level,
+        2,
+      )
+      return fsp
+        .readFile(file, {flag: 'r', encoding: 'utf8'})
+        .catch((error) => {
+          throw error
+        })
+    }),
+  )
+}
+
+export async function getAndCheckMetadataType(files: string[], _level: number) {
+  return Promise.all(
+    files.map((file, _index) => {
+      const match = file.match(regGenericMatch)
+      let meta: string
+      if (match !== null) {
+        meta = match[0]
+      }
+      if (!getSupportedMeta().includes(meta)) {
+        throw constants.ERR_META_NOT_SUPPORT
+      }
+      return meta
+    }),
+  ).then((data) => {
+    data = data.filter((el, i, a) => el !== undefined && i === a.indexOf(el))
+    if (data.length > 1) {
+      throw constants.ERR_META_MULTI
+    }
+    return data[0]
+  })
+}
+
+async function promXml2Js(file) {
+  return new Promise((resolve) => {
+    resolve(xmljs.xml2js(file, optXml2js))
+  })
+}
+
+export async function getParsedFiles(files: string[], _level: number) {
+  return Promise.all(
+    files.map((file, _index) => {
+      return promXml2Js(file)
+    }),
+  )
+}
+
+function deepSortKeyForJoin(obj: any, configJson: object) {
+  if (typeof obj === 'object') {
+    for (const key of _.keys(obj)) {
+      if (finalKeys.includes(key)) continue
+      if (configJson[key] && configJson[key].mdtype.keys) {
+        if (configJson[key].isArray) {
+          // eslint-disable-next-line max-depth
+          if (!Array.isArray(obj[key])) obj[key] = [obj[key]]
+          obj[key] = _.sortBy(
+            obj[key],
+            configJson[key].mdtype.keys.map((s) => sorter(s)),
+          )
+          obj[key] = _.keyBy(obj[key], (o) => {
+            if (configJson[key].mdtype.exclusiveKeys) {
+              return _.get(
+                o,
+                _.find(configJson[key].mdtype.exclusiveKeys, (k) =>
+                  _.has(o, k),
+                ),
+              )
+            }
+            if (configJson[key].mdtype.keys) {
+              return configJson[key].mdtype.keys.map((s) => _.get(o, s))
+            }
+          })
+        } else {
+          obj[key] = _.chain(obj[key]).toPairs().sortBy(0).fromPairs().value()
+        }
+        deepSortKeyForJoin(obj[key], configJson)
+      } else {
+        deepSortKeyForJoin(obj[key], configJson)
+      }
+    }
+  }
+}
+
+export async function getSortedKeyedForJoin(
+  files: object[],
+  configJson: object,
+) {
+  return Promise.all(
+    files.map((file: object, _index) => {
+      deepSortKeyForJoin(file, configJson)
+      return file
+    }),
+  )
+}
+
+export function joinFiles(sources: object[], reverse: boolean): void {
+  if (reverse) {
+    return _.defaultsDeep({}, ..._.reverse(sources))
+  }
+  return _.defaultsDeep({}, ...sources)
+}
+
+export function unkeyFiles(obj: any, configJson: object): void {
+  if (typeof obj === 'object') {
+    for (const key of _.keys(obj)) {
+      if (finalKeys.includes(key)) continue
+      if (configJson[key] && configJson[key].isArray) {
+        obj[key] = Object.values(obj[key])
+        unkeyFiles(obj[key], configJson)
+      } else {
+        unkeyFiles(obj[key], configJson)
+      }
+    }
+  }
 }
