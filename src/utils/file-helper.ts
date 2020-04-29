@@ -219,9 +219,13 @@ function sorter(s) {
   }
 }
 
-function deepSort(obj, configJson) {
+function sortObj(o: object): object {
+  return _.chain(o).toPairs().sortBy(0).fromPairs().value()
+}
+
+export function deepSort(obj, configJson) {
   if (typeof obj === 'object') {
-    for (const key of _.keys(obj)) {
+    for (const key of _.keys(obj).sort()) {
       if (finalKeys.includes(key)) continue
       if (configJson[key] && configJson[key].mdtype.keys) {
         if (configJson[key].isArray) {
@@ -232,12 +236,43 @@ function deepSort(obj, configJson) {
             configJson[key].mdtype.keys.map((s) => sorter(s)),
           )
         } else {
-          obj[key] = _.chain(obj[key]).toPairs().sortBy(0).fromPairs().value()
+          obj[key] = sortObj(obj[key])
         }
         deepSort(obj[key], configJson)
       } else {
+        if (!Array.isArray(obj[key]) && typeof obj[key] === 'object')
+          obj[key] = sortObj(obj[key])
         deepSort(obj[key], configJson)
       }
+    }
+  }
+}
+
+export function deepSortOld(obj, configJson) {
+  if (!Array.isArray(obj) && typeof obj === 'object') {
+    for (const key of _.keys(obj)) {
+      if (Array.isArray(obj[key])) {
+        if (configJson[key] && configJson[key].mdtype.keys) {
+          obj[key] = _.sortBy(
+            obj[key],
+            configJson[key].mdtype.keys.map((s) => {
+              return (r: any) => {
+                return _.get(r, s) ? _.get(r, s) : ''
+              }
+            }),
+          )
+        }
+      } else if (!Array.isArray(obj[key]) && typeof obj[key] === 'object') {
+        obj[key] = sortObj(obj[key])
+      }
+      deepSortOld(obj[key], configJson)
+    }
+  } else if (Array.isArray(obj)) {
+    for (let index = 0; index < obj.length; index++) {
+      if (!Array.isArray(obj[index]) && typeof obj[index] === 'object') {
+        obj[index] = sortObj(obj[index])
+      }
+      deepSortOld(obj[index], configJson)
     }
   }
 }
@@ -378,7 +413,7 @@ export async function getParsedFiles(files: string[], _level: number) {
   )
 }
 
-function deepSortKeyForJoin(obj: any, configJson: object) {
+function deepKeyForJoin(obj: any, configJson: object) {
   if (typeof obj === 'object') {
     for (const key of _.keys(obj)) {
       if (finalKeys.includes(key)) continue
@@ -386,10 +421,6 @@ function deepSortKeyForJoin(obj: any, configJson: object) {
         if (configJson[key].isArray) {
           // eslint-disable-next-line max-depth
           if (!Array.isArray(obj[key])) obj[key] = [obj[key]]
-          obj[key] = _.sortBy(
-            obj[key],
-            configJson[key].mdtype.keys.map((s) => sorter(s)),
-          )
           obj[key] = _.keyBy(obj[key], (o) => {
             if (configJson[key].mdtype.exclusiveKeys) {
               return _.get(
@@ -403,24 +434,19 @@ function deepSortKeyForJoin(obj: any, configJson: object) {
               return configJson[key].mdtype.keys.map((s) => _.get(o, s))
             }
           })
-        } else {
-          obj[key] = _.chain(obj[key]).toPairs().sortBy(0).fromPairs().value()
         }
-        deepSortKeyForJoin(obj[key], configJson)
+        deepKeyForJoin(obj[key], configJson)
       } else {
-        deepSortKeyForJoin(obj[key], configJson)
+        deepKeyForJoin(obj[key], configJson)
       }
     }
   }
 }
 
-export async function getSortedKeyedForJoin(
-  files: object[],
-  configJson: object,
-) {
+export async function getKeyedForJoin(files: object[], configJson: object) {
   return Promise.all(
     files.map((file: object, _index) => {
-      deepSortKeyForJoin(file, configJson)
+      deepKeyForJoin(file, configJson)
       return file
     }),
   )

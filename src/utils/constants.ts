@@ -15,7 +15,8 @@ export const constants = Object.freeze({
       parseFiles: 'parse files time',
       keyFiles: 'keying files time',
       joinFiles: 'join keyed time',
-      unKeyFiles: 'transform keyed to unkeyed',
+      unKeyFile: 'transform keyed to unkeyed',
+      sortFile: 'sorting file',
     },
   },
   success: {

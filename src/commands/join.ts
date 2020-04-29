@@ -171,7 +171,7 @@ export default class Join extends Command {
     }
     endTimer(constants.steps.join.joinFiles, flags.verbose)
 
-    startTimer(constants.steps.join.unKeyFiles, flags.verbose)
+    startTimer(constants.steps.join.unKeyFile, flags.verbose)
     const unKeyed = {}
     Object.keys(mergedKeyed)
       .sort()
@@ -186,7 +186,7 @@ export default class Join extends Command {
           unKeyed[mergedKeyed[key].nodeType] = mergedKeyed[key].node
         }
       })
-    endTimer(constants.steps.join.unKeyFiles, flags.verbose)
+    endTimer(constants.steps.join.unKeyFile, flags.verbose)
 
     startTimer(constants.steps.writeFile, flags.verbose)
     await writeOutputBased(meta, flags.output, unKeyed)

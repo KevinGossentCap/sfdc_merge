@@ -3,13 +3,13 @@ import {
   getFiles,
   getAndCheckMetadataType,
   getParsedFiles,
-  getSortedKeyedForJoin,
+  getKeyedForJoin,
   joinFiles,
   unkeyFiles,
+  deepSort,
   writeOutput,
 } from '../utils/file-helper'
 import {addVerboseInfo, startTimer, endTimer} from '../utils/verbose-helper'
-// import {JSONPath} from 'jsonpath-plus'
 import {constants} from '../utils/constants'
 import {getMetaConfig} from '../utils/generic-meta-node'
 
@@ -104,7 +104,7 @@ export default class Join2 extends Command {
 
     // ordering and keying
     startTimer(constants.steps.join.keyFiles, flags.verbose)
-    await getSortedKeyedForJoin(tabFiles, configMeta).then((data) => {
+    await getKeyedForJoin(tabFiles, configMeta).then((data) => {
       tabFiles = data
     })
     // console.dir(tabFiles, {depth: null})
@@ -117,10 +117,15 @@ export default class Join2 extends Command {
     endTimer(constants.steps.join.joinFiles, flags.verbose)
 
     // unkeying
-    startTimer(constants.steps.join.unKeyFiles, flags.verbose)
+    startTimer(constants.steps.join.unKeyFile, flags.verbose)
     unkeyFiles(merged, configMeta)
     // console.dir(merged, {depth: null})
-    endTimer(constants.steps.join.unKeyFiles, flags.verbose)
+    endTimer(constants.steps.join.unKeyFile, flags.verbose)
+
+    // resorting keys the right way
+    startTimer(constants.steps.join.sortFile, flags.verbose)
+    deepSort(merged, configMeta)
+    endTimer(constants.steps.join.sortFile, flags.verbose)
 
     // writing merged file
     startTimer(constants.steps.writeFile, flags.verbose)
