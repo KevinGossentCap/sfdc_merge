@@ -293,7 +293,7 @@ export async function doReadSortWrite(files: string[], level: number) {
           if (match !== null) {
             meta = match[0]
           }
-          if (!getSupportedMeta().includes(meta)) {
+          if (meta !== undefined && !getSupportedMeta().includes(meta)) {
             throw constants.ERR_META_NOT_SUPPORT
           }
           endTimer(
@@ -370,7 +370,20 @@ export async function getFiles(files: string[], level: number) {
       )
       return fsp
         .readFile(file, {flag: 'r', encoding: 'utf8'})
+        .then((data) => {
+          endTimer(
+            ['file:', file, 'index:', index.toString().padStart(3), 'reading'],
+            level,
+            2,
+          )
+          return data
+        })
         .catch((error) => {
+          endTimer(
+            ['file:', file, 'index:', index.toString().padStart(3), 'reading'],
+            level,
+            2,
+          )
           throw error
         })
     }),
@@ -385,7 +398,7 @@ export async function getAndCheckMetadataType(files: string[], _level: number) {
       if (match !== null) {
         meta = match[0]
       }
-      if (!getSupportedMeta().includes(meta)) {
+      if (meta !== undefined && !getSupportedMeta().includes(meta)) {
         throw constants.ERR_META_NOT_SUPPORT
       }
       return meta

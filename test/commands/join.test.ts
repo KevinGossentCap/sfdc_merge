@@ -6,7 +6,11 @@ const strJoin =
   '{"_declaration":{"$":{"version":"1.0","encoding":"UTF-8"}},"Profile":{"$":{"xmlns":"http://soap.sforce.com/2006/04/metadata"},"layoutAssignments":[{"layout":{"_":"Account-Account Layout"}},{"layout":{"_":"Account-Account Layout"},"recordType":{"_":"Account.Customer"}}],"userPermissions":[{"enabled":{"_":"false"},"name":{"_":"ViewSetup"}}]}}'
 
 describe('join', () => {
-  afterEach(function () {
+  before(function () {
+    shell.exec('git checkout -q -- test/files/*')
+  })
+  after(function () {
+    shell.exec('git clean -f -q -- test/files/*')
     shell.exec('git checkout -q -- test/files/*')
   })
 
@@ -175,7 +179,7 @@ describe('join', () => {
       '-m',
       './test/files/WZ_Admin.profile',
       '-o',
-      './test/files/WZ_Admin.profile',
+      './test/files/WZ_Admin2.profile',
     ])
     .it('runs join with big file', (ctx) => {
       expect(process.exit()).to.equal('foobar')
