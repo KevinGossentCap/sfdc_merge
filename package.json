@@ -98,9 +98,9 @@
     "release": "standard-version",
     "uninstall": "node ./bin/run uninstall",
     "install": "",
-    "postpack": "npx shx rm -f oclif.manifest.json",
-    "posttest": "eslint . --ext .ts",
-    "prepack": "npx shx rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
+    "postpack": "npx rimraf oclif.manifest.json",
+    "posttest": "eslint . --ext .ts && npx rimraf oclif.manifest.json",
+    "prepack": "npx rimraf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
     "test": "yarn prepack && nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
     "version": "oclif-dev readme && git add README.md"
   },
