@@ -153,6 +153,7 @@ describe('join', () => {
   test
     .stub(process, 'exit', () => 'foobar')
     .stdout()
+    .stderr()
     .command([
       'join',
       '-a',
@@ -165,6 +166,7 @@ describe('join', () => {
     .it('runs join variant unique key', (ctx) => {
       expect(process.exit()).to.equal('foobar')
       expect(ctx.stdout).to.contain(constants.success.join)
+      expect(ctx.stderr).to.contain(constants.ERR_UNLISTED_META_NODE.message)
     })
 
   test
