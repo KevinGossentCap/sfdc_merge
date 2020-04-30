@@ -1,10 +1,15 @@
 /* eslint-disable unicorn/no-process-exit, no-process-exit */
 import {expect, test} from '@oclif/test'
 import {constants} from '../../src/utils/constants'
+import * as shell from 'shelljs'
 const strJoin =
   '{"_declaration":{"$":{"version":"1.0","encoding":"UTF-8"}},"Profile":{"$":{"xmlns":"http://soap.sforce.com/2006/04/metadata"},"layoutAssignments":[{"layout":{"_":"Account-Account Layout"}},{"layout":{"_":"Account-Account Layout"},"recordType":{"_":"Account.Customer"}}],"userPermissions":[{"enabled":{"_":"false"},"name":{"_":"ViewSetup"}}]}}'
 
 describe('join', () => {
+  afterEach(function () {
+    shell.exec('git checkout -q -- test/files/*')
+  })
+
   test
     .stub(process, 'exit', () => 'foobar')
     .stderr()
