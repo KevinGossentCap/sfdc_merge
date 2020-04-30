@@ -8,6 +8,9 @@
         <plural>true</plural>
         <value>Dossiers</value>
     </caseValues>
+    <unknownKeys>
+        <unknownKey>toto</unknownKey>
+    </unknownKeys>
     <gender>Masculine</gender>
     <startsWith>Consonant</startsWith>
 </CustomObjectTranslation>
