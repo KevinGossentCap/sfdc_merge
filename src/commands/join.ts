@@ -1,14 +1,17 @@
 import {Command, flags} from '@oclif/command'
 import {
-  getMetadataType,
-  getMetaConfigJSON,
-  getKeyedFiles,
-  writeOutputBased,
-  allFilesExist,
+  getFiles,
+  getAndCheckMetadataType,
+  getParsedFiles,
+  getKeyedForJoin,
+  joinFiles,
+  unkeyFiles,
+  deepSort,
+  writeOutput,
 } from '../utils/file-helper'
 import {addVerboseInfo, startTimer, endTimer} from '../utils/verbose-helper'
-import {JSONPath} from 'jsonpath-plus'
 import {constants} from '../utils/constants'
+import {getMetaConfig} from '../utils/generic-meta-node'
 
 export default class Join extends Command {
   static description = 'Additionally merge the files of same metadataType'
@@ -46,150 +49,87 @@ export default class Join extends Command {
     const {flags} = this.parse(Join)
     startTimer(constants.steps.global, flags.verbose)
 
-    startTimer(constants.steps.inputs, flags.verbose)
-    if (flags.verbose && !flags.loglevel) flags.loglevel = 1
-    await allFilesExist(flags.meta).catch(() => {
-      console.error(constants.ERR_META_NOT_REACHABLE.message)
-      endTimer(constants.steps.global, flags.verbose)
-      throw constants.ERR_META_NOT_REACHABLE
-    })
-    endTimer(constants.steps.inputs, flags.verbose)
-
-    startTimer(constants.steps.join.getMeta, flags.verbose)
-    let meta
-    await getMetadataType(flags.meta)
-      .then((result) => {
-        meta = result
-        addVerboseInfo(flags.verbose, 'meta to join:', meta)
-      })
+    startTimer(constants.steps.join.getFiles, flags.verbose)
+    // get files and error if unreachable
+    let tabFiles: Array<any>
+    await getFiles(flags.meta, flags.loglevel)
       .catch((error) => {
+        if (error.code === 'ENOENT') {
+          endTimer(constants.steps.join.getFiles, flags.verbose)
+          console.error(constants.ERR_META_NOT_REACHABLE.message)
+          endTimer(constants.steps.global, flags.verbose)
+          throw constants.ERR_META_NOT_REACHABLE
+        }
+        throw error
+      })
+      .then((data) => {
+        tabFiles = data
+      })
+    endTimer(constants.steps.join.getFiles, flags.verbose)
+    // console.dir(tabFiles, {depth: null})
+
+    // get metadataType and error if unsupported or not only 1
+    startTimer(constants.steps.join.getMeta, flags.verbose)
+    let meta: string
+    await getAndCheckMetadataType(tabFiles, flags.loglevel)
+      .catch((error) => {
+        endTimer(constants.steps.join.getMeta, flags.verbose)
         console.error(error.message)
         endTimer(constants.steps.global, flags.verbose)
         throw error
       })
+      .then((data) => {
+        meta = data
+        addVerboseInfo(flags.verbose, 'meta to join:', meta)
+      })
     endTimer(constants.steps.join.getMeta, flags.verbose)
 
+    // getting related config fir metatada
     startTimer(constants.steps.join.getConf, flags.verbose)
-    let configJson
-    await getMetaConfigJSON(meta)
-      .then((result) => {
-        configJson = result
-      })
-      .catch(() => {
-        console.error(constants.ERR_META_NOT_SUPPORT.message, meta)
-        endTimer(constants.steps.global, flags.verbose)
-        throw constants.ERR_META_NOT_SUPPORT
-      })
+    const configMeta = getMetaConfig(meta)
     endTimer(constants.steps.join.getConf, flags.verbose)
 
-    startTimer(constants.steps.join.getFiles, flags.verbose)
-    let fileKeyedJSON
-    await getKeyedFiles(flags.meta, meta, configJson, flags.loglevel)
-      .then((result) => {
-        fileKeyedJSON = result
-      })
+    // parsing XML to js Object
+    startTimer(constants.steps.join.parseFiles, flags.verbose)
+    await getParsedFiles(tabFiles, flags.loglevel)
       .catch((error) => {
-        console.error(error)
+        endTimer(constants.steps.join.parseFiles, flags.verbose)
         throw error
       })
-    endTimer(constants.steps.join.getFiles, flags.verbose)
-
-    startTimer(constants.steps.join.joinFiles, flags.verbose)
-    const reducerKeyedLatest = function (acc, curr) {
-      // first loop we will use the current Permission => no merge required :D
-      if (Object.entries(acc).length === 0 && acc.constructor === Object) {
-        return curr
-      }
-      Object.assign(acc, curr)
-      return acc
-    }
-    const reducerKeyedmeld = function (acc, curr) {
-      // first loop we will use the current Permission => no merge required :D
-      if (Object.entries(acc).length === 0 && acc.constructor === Array) {
-        return curr
-      }
-      // eslint-disable-next-line new-cap
-      const jspath = JSONPath({
-        path: '$..[?(@.subKeys)]',
-        json: configJson,
-        resultType: 'parentProperty',
-        wrap: false,
+      .then((data) => {
+        tabFiles = data
       })
-      if (jspath) {
-        Object.keys(curr).forEach((p) => {
-          if (
-            acc[p] &&
-            configJson[curr[p].nodeType] &&
-            jspath.includes(curr[p].nodeType)
-          ) {
-            // make sure we aggregate only the subKeys elements, the rest remains only curr
-            configJson[curr[p].nodeType].subKeys.forEach((att) => {
-              if (acc[p].node[att]) {
-                let accArray = []
-                if (Array.isArray(acc[p].node[att])) {
-                  accArray = acc[p].node[att]
-                } else if (acc[p].node[att] !== undefined) {
-                  accArray = [acc[p].node[att]]
-                }
-                let currArray = []
-                if (Array.isArray(curr[p].node[att])) {
-                  currArray = curr[p].node[att]
-                } else if (curr[p].node[att] !== undefined) {
-                  currArray = [curr[p].node[att]]
-                }
-                const mapper = function (acc, curr) {
-                  if (typeof curr === 'string') {
-                    acc[curr] = curr
-                  } else {
-                    acc[curr._] = curr
-                  }
-                  return acc
-                }
-                accArray = accArray.reduce(mapper, [])
-                currArray = currArray.reduce(mapper, [])
-                Object.assign(accArray, currArray)
-                const result = []
-                for (const val of Object.values(accArray)) result.push(val)
-                curr[p].node[att] = result
-              }
-            })
-            Object.assign(acc[p], curr[p])
-          } else {
-            acc[p] = curr[p]
-          }
-        })
-      } else {
-        Object.assign(acc, curr)
-      }
-      return acc
-    }
-    let mergedKeyed
-    if (flags.algo === 'latest') {
-      mergedKeyed = fileKeyedJSON.reduce(reducerKeyedLatest, {})
-    } else {
-      mergedKeyed = fileKeyedJSON.reduce(reducerKeyedmeld, [])
-    }
+    // console.dir(tabFiles, {depth: null})
+    endTimer(constants.steps.join.parseFiles, flags.verbose)
+
+    // ordering and keying
+    startTimer(constants.steps.join.keyFiles, flags.verbose)
+    await getKeyedForJoin(tabFiles, configMeta).then((data) => {
+      tabFiles = data
+    })
+    // console.dir(tabFiles, {depth: null})
+    endTimer(constants.steps.join.keyFiles, flags.verbose)
+
+    // merging
+    startTimer(constants.steps.join.joinFiles, flags.verbose)
+    const merged = joinFiles(tabFiles, flags.algo === 'latest')
+    // console.dir(merged, {depth: null})
     endTimer(constants.steps.join.joinFiles, flags.verbose)
 
+    // unkeying
     startTimer(constants.steps.join.unKeyFile, flags.verbose)
-    const unKeyed = {}
-    Object.keys(mergedKeyed)
-      .sort()
-      .forEach(function (key) {
-        // eslint-disable-next-line no-negated-condition
-        if (mergedKeyed[key].nodeType !== '$') {
-          if (!Array.isArray(unKeyed[mergedKeyed[key].nodeType])) {
-            unKeyed[mergedKeyed[key].nodeType] = []
-          }
-          unKeyed[mergedKeyed[key].nodeType].push(mergedKeyed[key].node)
-        } else {
-          unKeyed[mergedKeyed[key].nodeType] = mergedKeyed[key].node
-        }
-      })
+    unkeyFiles(merged, configMeta)
+    // console.dir(merged, {depth: null})
     endTimer(constants.steps.join.unKeyFile, flags.verbose)
 
+    // resorting keys the right way
+    startTimer(constants.steps.join.sortFile, flags.verbose)
+    deepSort(merged, configMeta)
+    endTimer(constants.steps.join.sortFile, flags.verbose)
+
+    // writing merged file
     startTimer(constants.steps.writeFile, flags.verbose)
-    await writeOutputBased(meta, flags.output, unKeyed)
+    await writeOutput(meta, flags.output, merged)
     endTimer(constants.steps.writeFile, flags.verbose)
 
     endTimer(constants.steps.global, flags.verbose)
