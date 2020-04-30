@@ -1,6 +1,9 @@
 import {Command, flags} from '@oclif/command'
 import {startTimer, endTimer} from '../utils/verbose-helper'
-import {allFilesExist, doReadSortWrite} from '../utils/file-helper'
+import {
+  // allFilesExist,
+  doReadSortWrite,
+} from '../utils/file-helper'
 import {constants} from '../utils/constants'
 // import {configJson} from '../utils/generic-meta-node'
 
@@ -30,23 +33,14 @@ export default class Sort extends Command {
     const {flags} = this.parse(Sort)
     startTimer(constants.steps.global, flags.verbose)
 
-    startTimer(constants.steps.inputs, flags.verbose)
-    if (flags.verbose && !flags.loglevel) flags.loglevel = 1
-    await allFilesExist(flags.meta).catch(() => {
-      console.error(constants.ERR_META_NOT_REACHABLE.message)
+    await doReadSortWrite(flags.meta, flags.loglevel).catch((error) => {
+      if (error.code === 'ENOENT') {
+        error = constants.ERR_META_NOT_REACHABLE
+      }
+      console.error(error.message)
       endTimer(constants.steps.global, flags.verbose)
-      throw constants.ERR_META_NOT_REACHABLE
+      throw error
     })
-    endTimer(constants.steps.inputs, flags.verbose)
-
-    // startTimer(constants.steps.join.getConf, flags.verbose)
-    // let configJson
-    // await getGenericConfigJSON().then((result) => {
-    //   configJson = result
-    // })
-    // endTimer(constants.steps.join.getConf, flags.verbose)
-
-    await doReadSortWrite(flags.meta, flags.loglevel)
 
     endTimer(constants.steps.global, flags.verbose)
     console.log('sfdx-md-merge-driver:', constants.success.sort)

@@ -90,7 +90,6 @@ $ npm uninstall -g sfdx-md-merge-driver
 * [`sfdx-md-merge-driver help [COMMAND]`](#sfdx-md-merge-driver-help-command)
 * [`sfdx-md-merge-driver install`](#sfdx-md-merge-driver-install)
 * [`sfdx-md-merge-driver join`](#sfdx-md-merge-driver-join)
-* [`sfdx-md-merge-driver joinold`](#sfdx-md-merge-driver-joinold)
 * [`sfdx-md-merge-driver merge %O %A %B [%P]`](#sfdx-md-merge-driver-merge-o-a-b-p)
 * [`sfdx-md-merge-driver sort`](#sfdx-md-merge-driver-sort)
 * [`sfdx-md-merge-driver uninstall`](#sfdx-md-merge-driver-uninstall)
@@ -158,25 +157,6 @@ OPTIONS
 ```
 
 _See code: [src\commands\join.ts](https://github.com/KevinGossentCap/sfdc_merge/blob/v0.2.2-beta.1/src\commands\join.ts)_
-
-## `sfdx-md-merge-driver joinold`
-
-Additionally merge the files of same metadataType
-
-```
-USAGE
-  $ sfdx-md-merge-driver joinold
-
-OPTIONS
-  -a, --algo=latest|meld   [default: latest] algorithm for join, latest or meld
-  -h, --help               show CLI help
-  -l, --loglevel=loglevel  level of verbose details
-  -m, --meta=meta          (required) path(s) to file(s) to join
-  -o, --output=output      path to write output
-  -v, --verbose            verbose mode
-```
-
-_See code: [src\commands\joinold.ts](https://github.com/KevinGossentCap/sfdc_merge/blob/v0.2.2-beta.1/src\commands\joinold.ts)_
 
 ## `sfdx-md-merge-driver merge %O %A %B [%P]`
 

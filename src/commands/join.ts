@@ -53,36 +53,38 @@ export default class Join extends Command {
     // get files and error if unreachable
     let tabFiles: Array<any>
     await getFiles(flags.meta, flags.loglevel)
-      .catch((error) => {
-        if (error.code === 'ENOENT') {
-          endTimer(constants.steps.join.getFiles, flags.verbose)
-          console.error(constants.ERR_META_NOT_REACHABLE.message)
-          endTimer(constants.steps.global, flags.verbose)
-          throw constants.ERR_META_NOT_REACHABLE
-        }
-        throw error
-      })
       .then((data) => {
         tabFiles = data
       })
-    endTimer(constants.steps.join.getFiles, flags.verbose)
+      .finally(() => {
+        endTimer(constants.steps.join.getFiles, flags.verbose)
+      })
+      .catch((error) => {
+        if (error.code === 'ENOENT') {
+          error = constants.ERR_META_NOT_REACHABLE
+        }
+        console.error(error.message)
+        endTimer(constants.steps.global, flags.verbose)
+        throw error
+      })
     // console.dir(tabFiles, {depth: null})
 
     // get metadataType and error if unsupported or not only 1
     startTimer(constants.steps.join.getMeta, flags.verbose)
     let meta: string
     await getAndCheckMetadataType(tabFiles, flags.loglevel)
-      .catch((error) => {
-        endTimer(constants.steps.join.getMeta, flags.verbose)
-        console.error(error.message)
-        endTimer(constants.steps.global, flags.verbose)
-        throw error
-      })
       .then((data) => {
         meta = data
         addVerboseInfo(flags.verbose, 'meta to join:', meta)
       })
-    endTimer(constants.steps.join.getMeta, flags.verbose)
+      .finally(() => {
+        endTimer(constants.steps.join.getMeta, flags.verbose)
+      })
+      .catch((error) => {
+        console.error(error.message)
+        endTimer(constants.steps.global, flags.verbose)
+        throw error
+      })
 
     // getting related config fir metatada
     startTimer(constants.steps.join.getConf, flags.verbose)
@@ -92,23 +94,29 @@ export default class Join extends Command {
     // parsing XML to js Object
     startTimer(constants.steps.join.parseFiles, flags.verbose)
     await getParsedFiles(tabFiles, flags.loglevel)
-      .catch((error) => {
-        endTimer(constants.steps.join.parseFiles, flags.verbose)
-        throw error
-      })
       .then((data) => {
         tabFiles = data
       })
+      .finally(() => {
+        endTimer(constants.steps.join.parseFiles, flags.verbose)
+      })
+    // .catch((error) => {
+    //   console.error(error.message)
+    //   endTimer(constants.steps.global, flags.verbose)
+    //   throw error
+    // })
     // console.dir(tabFiles, {depth: null})
-    endTimer(constants.steps.join.parseFiles, flags.verbose)
 
     // ordering and keying
     startTimer(constants.steps.join.keyFiles, flags.verbose)
-    await getKeyedForJoin(tabFiles, configMeta).then((data) => {
-      tabFiles = data
-    })
+    await getKeyedForJoin(tabFiles, configMeta)
+      .then((data) => {
+        tabFiles = data
+      })
+      .finally(() => {
+        endTimer(constants.steps.join.keyFiles, flags.verbose)
+      })
     // console.dir(tabFiles, {depth: null})
-    endTimer(constants.steps.join.keyFiles, flags.verbose)
 
     // merging
     startTimer(constants.steps.join.joinFiles, flags.verbose)
@@ -129,7 +137,7 @@ export default class Join extends Command {
 
     // writing merged file
     startTimer(constants.steps.writeFile, flags.verbose)
-    await writeOutput(meta, flags.output, merged)
+    await writeOutput(flags.output, merged)
     endTimer(constants.steps.writeFile, flags.verbose)
 
     endTimer(constants.steps.global, flags.verbose)
