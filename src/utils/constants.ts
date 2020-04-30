@@ -4,6 +4,7 @@ export const constants = Object.freeze({
   ),
   ERR_META_NOT_SUPPORT: new Error('unsupported metadata Type'),
   ERR_META_MULTI: new Error('multiple metadataTypes given as input'),
+  ERR_UNLISTED_META_NODE: new Error('unlisted property:'),
   steps: {
     global: 'teatment time',
     inputs: 'input check time',

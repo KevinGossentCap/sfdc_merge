@@ -9,7 +9,7 @@ const fsp = fs.promises
 const regGenericMatch = /(?<=<)(\w+)(?= +xmlns)/
 const optXml2js = {compact: true, textKey: '_', attributesKey: '$'}
 const optJs2xml = {compact: true, textKey: '_', attributesKey: '$', spaces: 4}
-const finalKeys = ['$', '_']
+const finalKeys = ['$', '_', '_comment']
 
 export async function writeOutput(file, jsonOutput) {
   if (file !== undefined && file !== '') {
@@ -223,40 +223,50 @@ export async function getParsedFiles(files: string[], _level: number) {
   )
 }
 
-function deepKeyForJoin(obj: any, configJson: object) {
-  if (typeof obj === 'object') {
-    for (const key of _.keys(obj)) {
-      if (finalKeys.includes(key)) continue
-      if (configJson[key] && configJson[key].mdtype.keys) {
-        if (configJson[key].isArray) {
-          // eslint-disable-next-line max-depth
-          if (!Array.isArray(obj[key])) obj[key] = [obj[key]]
-          obj[key] = _.keyBy(obj[key], (o) => {
-            if (configJson[key].mdtype.exclusiveKeys) {
-              return _.get(
-                o,
-                _.find(configJson[key].mdtype.exclusiveKeys, (k) =>
-                  _.has(o, k),
-                ),
-              )
-            }
-            if (configJson[key].mdtype.keys) {
-              return configJson[key].mdtype.keys.map((s) => _.get(o, s))
-            }
-          })
+function deepKeyForJoin(obj: any, configJson: object): void {
+  if (!(typeof obj === 'object')) return
+  for (const key of _.keys(obj)) {
+    if (finalKeys.includes(key)) continue
+    if (configJson[key] && configJson[key].mdtype.keys) {
+      if (configJson[key].isArray) {
+        // eslint-disable-next-line max-depth
+        if (!Array.isArray(obj[key])) obj[key] = [obj[key]]
+        obj[key] = _.keyBy(obj[key], (o) => {
+          if (configJson[key].mdtype.exclusiveKeys) {
+            return _.get(
+              o,
+              _.find(configJson[key].mdtype.exclusiveKeys, (k) => _.has(o, k)),
+            )
+          }
+          if (configJson[key].mdtype.keys) {
+            return configJson[key].mdtype.keys.map((s) => _.get(o, s))
+          }
+        })
+        // eslint-disable-next-line max-depth
+        for (const elem of _.values(obj[key])) {
+          deepKeyForJoin(elem, configJson)
         }
-        deepKeyForJoin(obj[key], configJson)
       } else {
         deepKeyForJoin(obj[key], configJson)
       }
+    } else if (!_.has(obj[key], '_') && !_.has(obj[key], '_comment')) {
+      if (!configJson[key]) {
+        console.error(constants.ERR_UNLISTED_META_NODE.message, key)
+        // console.dir(obj[key], {depth: null})
+      }
+      deepKeyForJoin(obj[key], configJson)
     }
   }
 }
 
-export async function getKeyedForJoin(files: object[], configJson: object) {
+export async function getKeyedForJoin(
+  files: object[],
+  configJson: object,
+  meta: string,
+) {
   return Promise.all(
     files.map((file: object, _index) => {
-      deepKeyForJoin(file, configJson)
+      deepKeyForJoin(file[meta], configJson)
       return file
     }),
   )

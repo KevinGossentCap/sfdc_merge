@@ -121,8 +121,9 @@ const Translations = Object.freeze({
   FlowChoiceTranslation: {unicity: 'full', keys: ['name._']},
   FlowScreenTranslation: {unicity: 'full', keys: ['name._']},
   FlowStageTranslation: {unicity: 'full', keys: ['name._']},
+  FlowTextTemplateTranslation: {unicity: 'full', keys: ['name._']},
   FlowChoiceUserInputTranslation: {unicity: 'full', keys: ['name._']},
-  FlowInputValidationRuleTranslation: {},
+  FlowInputValidationRuleTranslation: {keys: ['errorMessage._']},
   FlowScreenFieldTranslation: {unicity: 'full', keys: ['name._']},
   ReportTypeSectionTranslation: {unicity: 'full', keys: ['name._']},
   ReportTypeColumnTranslation: {unicity: 'full', keys: ['name._']},
@@ -195,6 +196,7 @@ export const mdtypes = Object.freeze({
   FlowChoiceTranslation: Translations.FlowChoiceTranslation,
   FlowScreenTranslation: Translations.FlowScreenTranslation,
   FlowStageTranslation: Translations.FlowStageTranslation,
+  FlowTextTemplateTranslation: Translations.FlowTextTemplateTranslation,
   FlowChoiceUserInputTranslation: Translations.FlowChoiceUserInputTranslation,
   FlowInputValidationRuleTranslation:
     Translations.FlowInputValidationRuleTranslation,

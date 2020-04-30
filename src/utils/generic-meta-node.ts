@@ -54,6 +54,7 @@ const Profile = Object.freeze({
   },
   flowAccesses: {
     isArray: true,
+    isDocError: true,
     mdtype: mdtypes.flowAccesses,
   },
   layoutAssignments: {
@@ -306,6 +307,11 @@ const Translations = Object.freeze({
   stages: {
     isArray: true,
     mdtype: mdtypes.FlowStageTranslation,
+  },
+  textTemplates: {
+    isArray: true,
+    isDocError: true,
+    mdtype: mdtypes.FlowTextTemplateTranslation,
   },
   userInput: {
     isArray: false,

@@ -109,7 +109,7 @@ export default class Join extends Command {
 
     // ordering and keying
     startTimer(constants.steps.join.keyFiles, flags.verbose)
-    await getKeyedForJoin(tabFiles, configMeta)
+    await getKeyedForJoin(tabFiles, configMeta, meta)
       .then((data) => {
         tabFiles = data
       })
