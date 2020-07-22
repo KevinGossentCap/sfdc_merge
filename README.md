@@ -62,7 +62,7 @@ $ npm install -g @kgossent/sfdx-md-merge-driver
 $ sfdx-md-merge-driver COMMAND
 running command...
 $ sfdx-md-merge-driver (-v|--version|version)
-@kgossent/sfdx-md-merge-driver/0.2.2-beta.4 win32-x64 node-v12.16.2
+@kgossent/sfdx-md-merge-driver/0.2.2-beta.5 win32-x64 node-v12.18.2
 $ sfdx-md-merge-driver --help [COMMAND]
 USAGE
   $ sfdx-md-merge-driver COMMAND
@@ -90,7 +90,7 @@ $ npm uninstall -g sfdx-md-merge-driver
 * [`sfdx-md-merge-driver help [COMMAND]`](#sfdx-md-merge-driver-help-command)
 * [`sfdx-md-merge-driver install`](#sfdx-md-merge-driver-install)
 * [`sfdx-md-merge-driver join`](#sfdx-md-merge-driver-join)
-* [`sfdx-md-merge-driver merge %O %A %B [%P]`](#sfdx-md-merge-driver-merge-o-a-b-p)
+* [`sfdx-md-merge-driver merge [%O] [%A] [%B] [%P]`](#sfdx-md-merge-driver-merge-o-a-b-p)
 * [`sfdx-md-merge-driver sort`](#sfdx-md-merge-driver-sort)
 * [`sfdx-md-merge-driver uninstall`](#sfdx-md-merge-driver-uninstall)
 
@@ -137,7 +137,7 @@ OPTIONS
       Filenames that will trigger this driver.
 ```
 
-_See code: [src\commands\install.ts](https://github.com/KevinGossentCap/sfdc_merge/blob/v0.2.2-beta.4/src\commands\install.ts)_
+_See code: [src\commands\install.ts](https://github.com/KevinGossentCap/sfdc_merge/blob/v0.2.2-beta.5/src\commands\install.ts)_
 
 ## `sfdx-md-merge-driver join`
 
@@ -156,15 +156,15 @@ OPTIONS
   -v, --verbose            verbose mode
 ```
 
-_See code: [src\commands\join.ts](https://github.com/KevinGossentCap/sfdc_merge/blob/v0.2.2-beta.4/src\commands\join.ts)_
+_See code: [src\commands\join.ts](https://github.com/KevinGossentCap/sfdc_merge/blob/v0.2.2-beta.5/src\commands\join.ts)_
 
-## `sfdx-md-merge-driver merge %O %A %B [%P]`
+## `sfdx-md-merge-driver merge [%O] [%A] [%B] [%P]`
 
 Check for conflicts and merge them if possible.
 
 ```
 USAGE
-  $ sfdx-md-merge-driver merge %O %A %B [%P]
+  $ sfdx-md-merge-driver merge [%O] [%A] [%B] [%P]
 
 ARGUMENTS
   %O  ancestor’s version
@@ -173,10 +173,14 @@ ARGUMENTS
   %P  pathname in which the merged result will be stored
 
 OPTIONS
-  -h, --help  show CLI help
+  -a, --current=current    current version
+  -b, --other=other        other branches’ version
+  -h, --help               show CLI help
+  -o, --ancestor=ancestor  ancestor’s version
+  -p, --output=output      pathname in which the merged result will be stored
 ```
 
-_See code: [src\commands\merge.ts](https://github.com/KevinGossentCap/sfdc_merge/blob/v0.2.2-beta.4/src\commands\merge.ts)_
+_See code: [src\commands\merge.ts](https://github.com/KevinGossentCap/sfdc_merge/blob/v0.2.2-beta.5/src\commands\merge.ts)_
 
 ## `sfdx-md-merge-driver sort`
 
@@ -193,7 +197,7 @@ OPTIONS
   -v, --verbose            verbose mode
 ```
 
-_See code: [src\commands\sort.ts](https://github.com/KevinGossentCap/sfdc_merge/blob/v0.2.2-beta.4/src\commands\sort.ts)_
+_See code: [src\commands\sort.ts](https://github.com/KevinGossentCap/sfdc_merge/blob/v0.2.2-beta.5/src\commands\sort.ts)_
 
 ## `sfdx-md-merge-driver uninstall`
 
@@ -209,7 +213,7 @@ OPTIONS
   -n, --name=name  [default: sfdx-md-merge-driver] String to use as the merge driver name in your configuration.
 ```
 
-_See code: [src\commands\uninstall.ts](https://github.com/KevinGossentCap/sfdc_merge/blob/v0.2.2-beta.4/src\commands\uninstall.ts)_
+_See code: [src\commands\uninstall.ts](https://github.com/KevinGossentCap/sfdc_merge/blob/v0.2.2-beta.5/src\commands\uninstall.ts)_
 <!-- commandsstop -->
 
 # Author
