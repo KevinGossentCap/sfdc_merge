@@ -23,14 +23,17 @@ hello world from ./src/hello.ts!
     ancestor: flags.string({
       char: 'o',
       description: 'ancestor’s version',
+      required: true,
     }),
     current: flags.string({
       char: 'a',
       description: 'current version',
+      required: true,
     }),
     other: flags.string({
       char: 'b',
       description: 'other branches’ version',
+      required: true,
     }),
     output: flags.string({
       char: 'p',
@@ -38,15 +41,7 @@ hello world from ./src/hello.ts!
     }),
   }
 
-  static args = [
-    {name: '%O', description: 'ancestor’s version'},
-    {name: '%A', description: 'current version'},
-    {name: '%B', description: "other branches' version"},
-    {
-      name: '%P',
-      description: 'pathname in which the merged result will be stored',
-    },
-  ]
+  static args = []
 
   async run() {
     const {args, flags} = this.parse(Merge)
