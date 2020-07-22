@@ -12,10 +12,14 @@ describe('merge', () => {
     .stderr()
     .command([
       'merge',
-      '-o ./test/files/ancestor.profile-meta.xml',
-      '-a ./test/files/ours.profile-meta.xml',
-      '-b ./test/files/theirs.profile-meta.xml',
-      '-p ./test/files/ancestor.profile-meta.xml',
+      '-o',
+      './test/files/ancestor.profile-meta.xml',
+      '-a',
+      './test/files/ours.profile-meta.xml',
+      '-b',
+      './test/files/theirs.profile-meta.xml',
+      '-p',
+      './test/files/ancestor.profile-meta.xml',
     ])
     .it('runs merge', (ctx) => {
       expect(process.exit()).to.equal('foobar')
@@ -27,10 +31,14 @@ describe('merge', () => {
     .stderr()
     .command([
       'merge',
-      '-o no_file',
-      '-a ./test/files/ours.profile-meta.xml',
-      '-b ./test/files/theirs.profile-meta.xml',
-      '-p ./test/files/ancestor.profile-meta.xml',
+      '-o',
+      'no_file',
+      '-a',
+      './test/files/ours.profile-meta.xml',
+      '-b',
+      './test/files/theirs.profile-meta.xml',
+      '-p',
+      './test/files/ancestor.profile-meta.xml',
     ])
     .it('runs merge (w/o ancestor)', (ctx) => {
       expect(process.exit()).to.equal('foobar')
@@ -57,10 +65,14 @@ describe('merge', () => {
     .stderr()
     .command([
       'merge',
-      '-o ./test/files/ancestor.profile-meta.xml',
-      '-a ./test/files/ours.profile-meta.xml',
-      '-b no_file',
-      '-p ./test/files/ancestor.profile-meta.xml',
+      '-o',
+      './test/files/ancestor.profile-meta.xml',
+      '-a',
+      './test/files/ours.profile-meta.xml',
+      '-b',
+      'no_file',
+      '-p',
+      './test/files/ancestor.profile-meta.xml',
     ])
     .it('runs merge (w/o theirs)', (ctx) => {
       expect(process.exit()).to.equal('foobar')
@@ -72,10 +84,14 @@ describe('merge', () => {
     .stderr()
     .command([
       'merge',
-      '-o ./test/files/WZ_Admin.profile',
-      '-a ./test/files/WZ_Admin.profile',
-      '-b ./test/files/WZ_Admin.profile',
-      '-p ./test/files/WZ_Admin.profile',
+      '-o',
+      './test/files/WZ_Admin.profile',
+      '-a',
+      './test/files/WZ_Admin.profile',
+      '-b',
+      './test/files/WZ_Admin.profile',
+      '-p',
+      './test/files/WZ_Admin.profile',
     ])
     .it('runs merge big files', () => {
       expect(process.exit()).to.equal('foobar')
