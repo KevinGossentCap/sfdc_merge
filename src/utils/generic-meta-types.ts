@@ -23,6 +23,7 @@ const Profile = Object.freeze({
   },
   ProfileFieldLevelSecurity: {unicity: 'full', keys: ['field._']},
   flowAccesses: {unicity: 'full', keys: ['flow._']},
+  loginFlows: {unicity: 'full', keys: ['friendlyname._']},
   ProfileLayoutAssignments: {
     unicity: 'exclusive',
     exclusiveKeys: ['recordType._', 'layout._'],
@@ -72,6 +73,7 @@ const PermissionSet = Object.freeze({
   PermissionSetExternalDataSourceAccess:
     Profile.ProfileExternalDataSourceAccess,
   PermissionSetFieldPermissions: Profile.ProfileFieldLevelSecurity,
+  flowAccesses: Profile.flowAccesses,
   PermissionSetObjectPermissions: Profile.ProfileObjectPermissions,
   PermissionSetApexPageAccess: Profile.ProfileApexPageAccess,
   PermissionSetRecordTypeVisibility: Profile.ProfileRecordTypeVisibility,
@@ -141,6 +143,7 @@ export const mdtypes = Object.freeze({
   ProfileExternalDataSourceAccess: Profile.ProfileExternalDataSourceAccess,
   ProfileFieldLevelSecurity: Profile.ProfileFieldLevelSecurity,
   flowAccesses: Profile.flowAccesses,
+  loginFlows: Profile.loginFlows,
   ProfileLayoutAssignments: Profile.ProfileLayoutAssignments,
   ProfileLoginHours: Profile.ProfileLoginHours,
   ProfileLoginIpRange: Profile.ProfileLoginIpRange,

@@ -54,12 +54,15 @@ const Profile = Object.freeze({
   },
   flowAccesses: {
     isArray: true,
-    isDocError: true,
     mdtype: mdtypes.flowAccesses,
   },
   layoutAssignments: {
     isArray: true,
     mdtype: mdtypes.ProfileLayoutAssignments,
+  },
+  loginFlows: {
+    isArray: true,
+    mdtype: mdtypes.loginFlows,
   },
   loginHours: {
     isArray: true,
@@ -125,6 +128,10 @@ const PermissionSet = Object.freeze({
   fieldPermissions: {
     isArray: true,
     mdtype: mdtypes.PermissionSetFieldPermissions,
+  },
+  flowAccesses: {
+    isArray: true,
+    mdtype: mdtypes.flowAccesses,
   },
   hasActivationRequired: {mdtype: mdtypes.String},
   label: {mdtype: mdtypes.String},
