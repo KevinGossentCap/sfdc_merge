@@ -28,14 +28,14 @@ In the case of a node being modified in our local workspace and in the branch we
 To start using it right away:
 
 ```
-$ npx sfdx-md-merge-driver install --global
+$ npx @kgossent/sfdx-md-merge-driver install --global
 ```
 
 **Or** install it locally, per-project:
 
 ```
 $ cd /path/to/git/repository
-$ npx sfdx-md-merge-driver install
+$ npx @kgossent/sfdx-md-merge-driver install
 ```
 
 ...And you're good to go!
@@ -43,7 +43,7 @@ $ npx sfdx-md-merge-driver install
 ## Example
 
 ```
-$ npx sfdx-md-merge-driver install
+$ npx @kgossent/sfdx-md-merge-driver install
 $ git merge my-conflicting-branch
 Conflicts Found: 2
 Conflicts Found: 0
