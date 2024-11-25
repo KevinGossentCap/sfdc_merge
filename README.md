@@ -211,6 +211,13 @@ OPTIONS
 _See code: [src/commands/uninstall.ts](https://github.com/KevinGossentCap/sfdc_merge/blob/v0.1.29/src/commands/uninstall.ts)_
 <!-- commandsstop -->
 
+# Algorythm thinking
+
+For easy key (api_key) values: the key is the unicity, the value is looked into for conflicts
+For almost easy key with value-block: unicity driven by a single key field and value block cannot be seperate, equivalent of previous point
+For composite key (multiple fields) with value or value-block: unicity created by a virtual concatenation of key fields, value or value-block is looked into for conflicts
+For indexed array of the previous scenarios: unicity is as previously but we have to include the index as a virtual value to recompose a properly ordered array in the end
+
 # Author
 
 Written by [jayree](https://github.com/jayree)
