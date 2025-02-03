@@ -3,7 +3,8 @@
 
 // import {AnyJson, JsonMap, Nullable} from '@salesforce/ts-types'
 import fs from 'node:fs'
-import path from 'node:path'
+import path, {dirname} from 'node:path'
+import { fileURLToPath } from 'node:url';
 import * as xml2js from 'xml2js'
 
 export default class MetadataMerger {
@@ -101,8 +102,9 @@ export default class MetadataMerger {
   }
 
   getConfigPath() {
+    const __dirname = dirname(fileURLToPath(import.meta.url));
     return path.join(
-      // __dirname,
+     __dirname,
       '..',
       '..',
       '/conf/merge-' + this.metadataType.toLowerCase() + '-config.json',
