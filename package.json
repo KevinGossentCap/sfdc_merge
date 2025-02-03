@@ -1,7 +1,7 @@
 {
   "name": "@kgossent/sfdx-md-merge-driver",
   "description": "git merge driver specific for Salesforce.com Metadata",
-  "version": "1.0.0-alpha.5",
+  "version": "1.0.0-alpha.6",
   "author": "KevinGossent @kgossent",
   "bin": {
     "sfdx-md-merge-driver": "./bin/run.js"
@@ -71,7 +71,7 @@
     "postpack": "shx rm -f oclif.manifest.json",
     "posttest": "npm run lint",
     "prepack": "oclif manifest && oclif readme",
-    "test": "mocha --forbid-only \"test/**/*.test.ts\"",
+    "test": "mocha -R list --forbid-only \"test/**/*.test.ts\"",
     "version": "oclif readme && git add README.md"
   },
   "types": "dist/index.d.ts"

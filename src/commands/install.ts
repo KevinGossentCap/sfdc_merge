@@ -6,6 +6,15 @@ import path from 'node:path'
 import {getRoot} from '../utils/driver-utils.js'
 import Uninstall from './uninstall.js'
 
+const defaultFiles:string[] = [
+  // '*.profile',
+  // '*.profile-meta.xml',
+  // '*.permissionset',
+  // '*.permissionset-meta.xml',
+  '*.labels',
+  '*.labels-meta.xml',
+]
+
 export default class Install extends Command {
   static override description = 'Set up the merge driver in the current git repository'
   static override flags = {
@@ -17,21 +26,14 @@ export default class Install extends Command {
     }),
     files: Flags.string({
       char: 't',
-      default: [
-        // '*.profile',
-        // '*.profile-meta.xml',
-        // '*.permissionset',
-        // '*.permissionset-meta.xml',
-        '*.labels',
-        '*.labels-meta.xml',
-      ],
+      default: defaultFiles,
       description: 'Filenames that will trigger this driver.',
       multiple: true,
       options: [
-        // '*.profile',
-        // '*.profile-meta.xml',
-        // '*.permissionset',
-        // '*.permissionset-meta.xml',
+        '*.profile',
+        '*.profile-meta.xml',
+        '*.permissionset',
+        '*.permissionset-meta.xml',
         '*.labels',
         '*.labels-meta.xml',
       ],
@@ -58,12 +60,12 @@ export default class Install extends Command {
       throw new Error('Current working directory is not using git or git is not installed, skipping install.')
     }
 
-    // Uninstall.run()
-    const uninst = new Uninstall([], this.config)
-    await uninst.run()
-    // spawnSync.spawnSync(
-    //   'npx @kgossent/sfdx-md-merge-driver uninstall'
-    // )
+    if (this.areEqual(flags.files, defaultFiles)) {
+      const uninstallOptions = ['--name', flags.name]
+      if (flags.global) {uninstallOptions.push('--global')}
+      const uninst = new Uninstall(uninstallOptions, this.config)
+      await uninst.run()
+    }
 
     const infoDir = path.join(rootDir, '.git', 'info')
     if (!fs.existsSync(infoDir)) {
@@ -104,5 +106,13 @@ export default class Install extends Command {
     fs.writeFileSync(attrFile, attrContents)
 
     this.log('installed successfully')
+  }
+
+  private areEqual(array1:string[], array2:string[]) {
+    if (array1.length === array2.length) {
+      return array1.every(element => array2.includes(element))
+    }
+
+    return false
   }
 }
