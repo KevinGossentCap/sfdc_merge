@@ -1,4 +1,4 @@
- import {runCommand} from '@oclif/test'
+import {runCommand} from '@oclif/test'
 import {expect} from 'chai'
 import spawnSync from 'node:child_process'
 
