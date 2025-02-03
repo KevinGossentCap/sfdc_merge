@@ -1,0 +1,1 @@
+{"root":["./src/index.ts","./src/commands/install.ts","./src/commands/merge.ts","./src/commands/uninstall.ts","./src/utils/driver-utils.ts","./src/utils/metadata-merger.ts"],"version":"5.7.3"}

@@ -1,10 +1,9 @@
-import {expect, test} from '@oclif/test'
+import {runCommand} from '@oclif/test'
+import {expect} from 'chai'
 
 describe('install', () => {
-  test
-    .stdout()
-    .command(['install'])
-    .it('runs install', (ctx) => {
-      expect(ctx.stdout).to.contain('')
-    })
+  it('runs install cmd', async () => {
+    const {stdout} = await runCommand('install')
+    expect(stdout).to.contain('')
+  })
 })

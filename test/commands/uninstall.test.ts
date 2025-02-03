@@ -1,10 +1,9 @@
-import {expect, test} from '@oclif/test'
+import {runCommand} from '@oclif/test'
+import {expect} from 'chai'
 
 describe('uninstall', () => {
-  test
-    .stdout()
-    .command(['uninstall'])
-    .it('runs uninstall', ctx => {
-      expect(ctx.stdout).to.contain('')
-    })
+  it('runs uninstall cmd', async () => {
+    const {stdout} = await runCommand('uninstall')
+    expect(stdout).to.contain('')
+  })
 })

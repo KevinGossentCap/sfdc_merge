@@ -1,114 +1,103 @@
-import {flags} from '@oclif/command'
-import {MergeDriverBase} from '../base'
-import * as path from 'path'
-import * as shell from 'shelljs'
-import * as mkdirp from 'mkdirp'
-import * as fs from 'fs'
+import {Command, Flags} from '@oclif/core'
+import spawnSync from 'node:child_process'
+import fs from 'node:fs'
+import path from 'node:path'
 
-const PackageJson = require('../utils/package-json')
-const pjson = new PackageJson()
+import {getRoot} from '../utils/driver-utils.js'
+import Uninstall from './uninstall.js'
 
-export default class Install extends MergeDriverBase {
-  static description = 'Set up the merge driver in the current git repository.'
-
-  /*   static examples = [
-    `$ sfdx-md-merge-driver hello
-hello world from ./src/hello.ts!
-`
-  ]; */
-
-  static flags = {
-    help: flags.help({char: 'h'}),
-    global: flags.boolean({
-      char: 'g',
-      description: 'install to your user-level git configuration',
-    }),
-    driver: flags.string({
+export default class Install extends Command {
+  static override description = 'Set up the merge driver in the current git repository'
+  static override flags = {
+    driver: Flags.string({
       char: 'd',
+      default: 'npx @kgossent/sfdx-md-merge-driver merge -o %O -a %A -b %B -p %P',
+      deprecated: true,
       description: 'string to install as the driver in the git configuration',
-      default: 'sfdx-md-merge-driver merge -o %O -a %A -b %B -p %P',
     }),
-    name: flags.string({
-      char: 'n',
-      description:
-        'String to use as the merge driver name in your configuration.',
-      default: 'sfdx-md-merge-driver',
-    }),
-    files: flags.string({
+    files: Flags.string({
       char: 't',
+      default: [
+        // '*.profile',
+        // '*.profile-meta.xml',
+        // '*.permissionset',
+        // '*.permissionset-meta.xml',
+        '*.labels',
+        '*.labels-meta.xml',
+      ],
       description: 'Filenames that will trigger this driver.',
       multiple: true,
       options: [
-        '*.profile',
-        '*.profile-meta.xml',
-        '*.permissionset',
-        '*.permissionset-meta.xml',
-        '*.labels',
-        '*.labels-meta.xml',
-      ],
-      default: [
-        '*.profile',
-        '*.profile-meta.xml',
-        '*.permissionset',
-        '*.permissionset-meta.xml',
+        // '*.profile',
+        // '*.profile-meta.xml',
+        // '*.permissionset',
+        // '*.permissionset-meta.xml',
         '*.labels',
         '*.labels-meta.xml',
       ],
     }),
+    global: Flags.boolean({
+      char: 'g',
+      description: 'install to your user-level git configuration',
+    }),
+    help: Flags.help({char: 'h'}),
+    name: Flags.string({
+      char: 'n',
+      default: 'sfdx-md-merge-driver',
+      description:
+        'String to use as the merge driver name in your configuration.',
+    }),
   }
 
-  async run() {
-    const {flags} = this.parse(Install)
-    if (pjson.name !== 'sfdx-md-merge-driver') {
-      const attrFile = path.join(
-        pjson.path,
-        this.findAttributes(flags.global, pjson.path).replace(
-          /^\s*~\//,
-          process.env.HOME + '/',
-        ),
-      )
-      const opts = flags.global ? '--global' : '--local'
-      shell.exec(
-        `git config ${opts} merge."${flags.name}".name "A custom merge driver for Salesforce profiles"`,
-        {
-          cwd: pjson.path,
-        },
-      )
-      shell.exec(
-        `git config ${opts} merge."${flags.name}".driver "${flags.driver}"`,
-        {
-          cwd: pjson.path,
-        },
-      )
-      shell.exec(`git config ${opts} merge."${flags.name}".recursive binary`, {
-        cwd: pjson.path,
-      })
-      mkdirp.sync(path.dirname(attrFile))
-      let attrContents = ''
-      try {
-        const RE = new RegExp(`.* merge\\s*=\\s*${flags.name}$`)
-        attrContents = fs
-          .readFileSync(attrFile, 'utf8')
-          .split(/\r?\n/)
-          .filter((line) => !line.match(RE))
-          .join('\n')
-      } catch (error) {}
-      if (attrContents && !attrContents.match(/[\n\r]$/g)) {
-        attrContents += '\n'
-      }
-      attrContents += flags.files
-        .map((f) => `${f} merge=${flags.name}`)
-        .join('\n')
-      attrContents += '\n'
-      fs.writeFileSync(attrFile, attrContents)
-      console.error(
-        'sfdx-md-merge-driver:',
-        flags.name,
-        'installed to `git config',
-        opts + '`',
-        'and',
-        attrFile,
-      )
+  public async run(): Promise<void> {
+    const {flags} = await this.parse(Install)
+    const {env} = process
+    const rootDir = getRoot()
+
+    if (!rootDir) {
+      throw new Error('Current working directory is not using git or git is not installed, skipping install.')
     }
+
+    Uninstall.run()
+
+    const infoDir = path.join(rootDir, '.git', 'info')
+    if (!fs.existsSync(infoDir)) {
+      fs.mkdirSync(infoDir)
+    }
+
+    // add to git config
+    const opts = flags.global ? '--global' : '--local'
+    const configOne = spawnSync.spawnSync(
+      'git',
+      ['config', opts, 'merge.'+flags.name+'.name', 'automatically merge npm lockfiles'],
+      {cwd: rootDir, env}
+    )
+    const configTwo = spawnSync.spawnSync(
+      'git',
+      ['config', opts, 'merge.'+flags.name+'.driver', flags.driver],
+      {cwd: rootDir, env}
+    )
+    if (configOne.status !== 0 || configTwo.status !== 0) {
+      throw new Error('Failed to configure '+flags.name+' in git directory')
+    }
+
+    // add to attributes file
+    const attrFile = path.join(infoDir, 'attributes')
+    let attrContents = ''
+    if (fs.existsSync(attrFile)) {
+      attrContents = fs.readFileSync(attrFile, 'utf8').trim()
+    }
+
+    if (attrContents && !/[\n\r]$/g.test(attrContents)) {
+      attrContents += '\n'
+    }
+
+    for (const element of flags.files) {
+      attrContents += element+' merge='+flags.name+'\n'
+    }
+
+    fs.writeFileSync(attrFile, attrContents)
+
+    this.log('installed successfully')
   }
 }
