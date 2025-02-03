@@ -60,7 +60,7 @@ export default class Install extends Command {
 
     // Uninstall.run()
     const uninst = new Uninstall([], this.config)
-    uninst.run()
+    await uninst.run()
     // spawnSync.spawnSync(
     //   'npx @kgossent/sfdx-md-merge-driver uninstall'
     // )
