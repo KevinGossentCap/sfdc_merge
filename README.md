@@ -16,82 +16,41 @@ git merge driver specific for Salesforce.com Metadata
 # Usage
 <!-- usage -->
 ```sh-session
-$ npm install -g mycli123
-$ mycli123 COMMAND
+$ npm install -g @kgossent/sfdx-md-merge-driver
+$ sfdx-md-merge-driver COMMAND
 running command...
-$ mycli123 (--version)
-mycli123/0.0.0 darwin-arm64 node-v20.12.2
-$ mycli123 --help [COMMAND]
+$ sfdx-md-merge-driver (--version)
+@kgossent/sfdx-md-merge-driver/1.0.0-alpha.1 win32-x64 node-v22.13.1
+$ sfdx-md-merge-driver --help [COMMAND]
 USAGE
-  $ mycli123 COMMAND
+  $ sfdx-md-merge-driver COMMAND
 ...
 ```
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-* [`mycli123 hello PERSON`](#mycli123-hello-person)
-* [`mycli123 hello world`](#mycli123-hello-world)
-* [`mycli123 help [COMMAND]`](#mycli123-help-command)
-* [`mycli123 plugins`](#mycli123-plugins)
-* [`mycli123 plugins add PLUGIN`](#mycli123-plugins-add-plugin)
-* [`mycli123 plugins:inspect PLUGIN...`](#mycli123-pluginsinspect-plugin)
-* [`mycli123 plugins install PLUGIN`](#mycli123-plugins-install-plugin)
-* [`mycli123 plugins link PATH`](#mycli123-plugins-link-path)
-* [`mycli123 plugins remove [PLUGIN]`](#mycli123-plugins-remove-plugin)
-* [`mycli123 plugins reset`](#mycli123-plugins-reset)
-* [`mycli123 plugins uninstall [PLUGIN]`](#mycli123-plugins-uninstall-plugin)
-* [`mycli123 plugins unlink [PLUGIN]`](#mycli123-plugins-unlink-plugin)
-* [`mycli123 plugins update`](#mycli123-plugins-update)
+* [`sfdx-md-merge-driver help [COMMAND]`](#sfdx-md-merge-driver-help-command)
+* [`sfdx-md-merge-driver install`](#sfdx-md-merge-driver-install)
+* [`sfdx-md-merge-driver merge`](#sfdx-md-merge-driver-merge)
+* [`sfdx-md-merge-driver plugins`](#sfdx-md-merge-driver-plugins)
+* [`sfdx-md-merge-driver plugins add PLUGIN`](#sfdx-md-merge-driver-plugins-add-plugin)
+* [`sfdx-md-merge-driver plugins:inspect PLUGIN...`](#sfdx-md-merge-driver-pluginsinspect-plugin)
+* [`sfdx-md-merge-driver plugins install PLUGIN`](#sfdx-md-merge-driver-plugins-install-plugin)
+* [`sfdx-md-merge-driver plugins link PATH`](#sfdx-md-merge-driver-plugins-link-path)
+* [`sfdx-md-merge-driver plugins remove [PLUGIN]`](#sfdx-md-merge-driver-plugins-remove-plugin)
+* [`sfdx-md-merge-driver plugins reset`](#sfdx-md-merge-driver-plugins-reset)
+* [`sfdx-md-merge-driver plugins uninstall [PLUGIN]`](#sfdx-md-merge-driver-plugins-uninstall-plugin)
+* [`sfdx-md-merge-driver plugins unlink [PLUGIN]`](#sfdx-md-merge-driver-plugins-unlink-plugin)
+* [`sfdx-md-merge-driver plugins update`](#sfdx-md-merge-driver-plugins-update)
+* [`sfdx-md-merge-driver uninstall`](#sfdx-md-merge-driver-uninstall)
 
-## `mycli123 hello PERSON`
+## `sfdx-md-merge-driver help [COMMAND]`
 
-Say hello
-
-```
-USAGE
-  $ mycli123 hello PERSON -f <value>
-
-ARGUMENTS
-  PERSON  Person to say hello to
-
-FLAGS
-  -f, --from=<value>  (required) Who is saying hello
-
-DESCRIPTION
-  Say hello
-
-EXAMPLES
-  $ mycli123 hello friend --from oclif
-  hello friend from oclif! (./src/commands/hello/index.ts)
-```
-
-_See code: [src/commands/hello/index.ts](https://github.com/mdonnalley/mycli123/blob/v0.0.0/src/commands/hello/index.ts)_
-
-## `mycli123 hello world`
-
-Say hello world
+Display help for sfdx-md-merge-driver.
 
 ```
 USAGE
-  $ mycli123 hello world
-
-DESCRIPTION
-  Say hello world
-
-EXAMPLES
-  $ mycli123 hello world
-  hello world! (./src/commands/hello/world.ts)
-```
-
-_See code: [src/commands/hello/world.ts](https://github.com/mdonnalley/mycli123/blob/v0.0.0/src/commands/hello/world.ts)_
-
-## `mycli123 help [COMMAND]`
-
-Display help for mycli123.
-
-```
-USAGE
-  $ mycli123 help [COMMAND...] [-n]
+  $ sfdx-md-merge-driver help [COMMAND...] [-n]
 
 ARGUMENTS
   COMMAND...  Command to show help for.
@@ -100,18 +59,62 @@ FLAGS
   -n, --nested-commands  Include all nested commands in the output.
 
 DESCRIPTION
-  Display help for mycli123.
+  Display help for sfdx-md-merge-driver.
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v6.0.21/src/commands/help.ts)_
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v6.2.23/src/commands/help.ts)_
 
-## `mycli123 plugins`
+## `sfdx-md-merge-driver install`
+
+Set up the merge driver in the current git repository
+
+```
+USAGE
+  $ sfdx-md-merge-driver install [-d <value>] [-t *.labels|*.labels-meta.xml...] [-g] [-h] [-n <value>]
+
+FLAGS
+  -d, --driver=<value>     [default: npx @kgossent/sfdx-md-merge-driver merge -o %O -a %A -b %B -p %P] string to install
+                           as the driver in the git configuration
+  -g, --global             install to your user-level git configuration
+  -h, --help               Show CLI help.
+  -n, --name=<value>       [default: sfdx-md-merge-driver] String to use as the merge driver name in your configuration.
+  -t, --files=<option>...  [default: *.labels,*.labels-meta.xml] Filenames that will trigger this driver.
+                           <options: *.labels|*.labels-meta.xml>
+
+DESCRIPTION
+  Set up the merge driver in the current git repository
+```
+
+_See code: [src/commands/install.ts](https://github.com/KevinGossentCap/sfdc_merge/blob/v1.0.0-alpha.1/src/commands/install.ts)_
+
+## `sfdx-md-merge-driver merge`
+
+Check for conflicts and merge them if possible.
+
+```
+USAGE
+  $ sfdx-md-merge-driver merge -o <value> -a <value> -b <value> [-h] [-p <value>]
+
+FLAGS
+  -a, --current=<value>   (required) current version
+  -b, --other=<value>     (required) other branches’ version
+  -h, --help              Show CLI help.
+  -o, --ancestor=<value>  (required) ancestor’s version
+  -p, --output=<value>    pathname in which the merged result will be stored
+
+DESCRIPTION
+  Check for conflicts and merge them if possible.
+```
+
+_See code: [src/commands/merge.ts](https://github.com/KevinGossentCap/sfdc_merge/blob/v1.0.0-alpha.1/src/commands/merge.ts)_
+
+## `sfdx-md-merge-driver plugins`
 
 List installed plugins.
 
 ```
 USAGE
-  $ mycli123 plugins [--json] [--core]
+  $ sfdx-md-merge-driver plugins [--json] [--core]
 
 FLAGS
   --core  Show core plugins.
@@ -123,18 +126,18 @@ DESCRIPTION
   List installed plugins.
 
 EXAMPLES
-  $ mycli123 plugins
+  $ sfdx-md-merge-driver plugins
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.0.16/src/commands/plugins/index.ts)_
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.4.28/src/commands/plugins/index.ts)_
 
-## `mycli123 plugins add PLUGIN`
+## `sfdx-md-merge-driver plugins add PLUGIN`
 
-Installs a plugin into mycli123.
+Installs a plugin into sfdx-md-merge-driver.
 
 ```
 USAGE
-  $ mycli123 plugins add PLUGIN... [--json] [-f] [-h] [-s | -v]
+  $ sfdx-md-merge-driver plugins add PLUGIN... [--json] [-f] [-h] [-s | -v]
 
 ARGUMENTS
   PLUGIN...  Plugin to install.
@@ -149,39 +152,39 @@ GLOBAL FLAGS
   --json  Format output as json.
 
 DESCRIPTION
-  Installs a plugin into mycli123.
+  Installs a plugin into sfdx-md-merge-driver.
 
-  Uses bundled npm executable to install plugins into /Users/mdonnalley/.local/share/mycli123
+  Uses npm to install plugins.
 
   Installation of a user-installed plugin will override a core plugin.
 
-  Use the MYCLI123_NPM_LOG_LEVEL environment variable to set the npm loglevel.
-  Use the MYCLI123_NPM_REGISTRY environment variable to set the npm registry.
+  Use the SFDX_MD_MERGE_DRIVER_NPM_LOG_LEVEL environment variable to set the npm loglevel.
+  Use the SFDX_MD_MERGE_DRIVER_NPM_REGISTRY environment variable to set the npm registry.
 
 ALIASES
-  $ mycli123 plugins add
+  $ sfdx-md-merge-driver plugins add
 
 EXAMPLES
   Install a plugin from npm registry.
 
-    $ mycli123 plugins add myplugin
+    $ sfdx-md-merge-driver plugins add myplugin
 
   Install a plugin from a github url.
 
-    $ mycli123 plugins add https://github.com/someuser/someplugin
+    $ sfdx-md-merge-driver plugins add https://github.com/someuser/someplugin
 
   Install a plugin from a github slug.
 
-    $ mycli123 plugins add someuser/someplugin
+    $ sfdx-md-merge-driver plugins add someuser/someplugin
 ```
 
-## `mycli123 plugins:inspect PLUGIN...`
+## `sfdx-md-merge-driver plugins:inspect PLUGIN...`
 
 Displays installation properties of a plugin.
 
 ```
 USAGE
-  $ mycli123 plugins inspect PLUGIN...
+  $ sfdx-md-merge-driver plugins inspect PLUGIN...
 
 ARGUMENTS
   PLUGIN...  [default: .] Plugin to inspect.
@@ -197,18 +200,18 @@ DESCRIPTION
   Displays installation properties of a plugin.
 
 EXAMPLES
-  $ mycli123 plugins inspect myplugin
+  $ sfdx-md-merge-driver plugins inspect myplugin
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.0.16/src/commands/plugins/inspect.ts)_
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.4.28/src/commands/plugins/inspect.ts)_
 
-## `mycli123 plugins install PLUGIN`
+## `sfdx-md-merge-driver plugins install PLUGIN`
 
-Installs a plugin into mycli123.
+Installs a plugin into sfdx-md-merge-driver.
 
 ```
 USAGE
-  $ mycli123 plugins install PLUGIN... [--json] [-f] [-h] [-s | -v]
+  $ sfdx-md-merge-driver plugins install PLUGIN... [--json] [-f] [-h] [-s | -v]
 
 ARGUMENTS
   PLUGIN...  Plugin to install.
@@ -223,41 +226,41 @@ GLOBAL FLAGS
   --json  Format output as json.
 
 DESCRIPTION
-  Installs a plugin into mycli123.
+  Installs a plugin into sfdx-md-merge-driver.
 
-  Uses bundled npm executable to install plugins into /Users/mdonnalley/.local/share/mycli123
+  Uses npm to install plugins.
 
   Installation of a user-installed plugin will override a core plugin.
 
-  Use the MYCLI123_NPM_LOG_LEVEL environment variable to set the npm loglevel.
-  Use the MYCLI123_NPM_REGISTRY environment variable to set the npm registry.
+  Use the SFDX_MD_MERGE_DRIVER_NPM_LOG_LEVEL environment variable to set the npm loglevel.
+  Use the SFDX_MD_MERGE_DRIVER_NPM_REGISTRY environment variable to set the npm registry.
 
 ALIASES
-  $ mycli123 plugins add
+  $ sfdx-md-merge-driver plugins add
 
 EXAMPLES
   Install a plugin from npm registry.
 
-    $ mycli123 plugins install myplugin
+    $ sfdx-md-merge-driver plugins install myplugin
 
   Install a plugin from a github url.
 
-    $ mycli123 plugins install https://github.com/someuser/someplugin
+    $ sfdx-md-merge-driver plugins install https://github.com/someuser/someplugin
 
   Install a plugin from a github slug.
 
-    $ mycli123 plugins install someuser/someplugin
+    $ sfdx-md-merge-driver plugins install someuser/someplugin
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.0.16/src/commands/plugins/install.ts)_
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.4.28/src/commands/plugins/install.ts)_
 
-## `mycli123 plugins link PATH`
+## `sfdx-md-merge-driver plugins link PATH`
 
 Links a plugin into the CLI for development.
 
 ```
 USAGE
-  $ mycli123 plugins link PATH [-h] [--install] [-v]
+  $ sfdx-md-merge-driver plugins link PATH [-h] [--install] [-v]
 
 ARGUMENTS
   PATH  [default: .] path to plugin
@@ -269,6 +272,7 @@ FLAGS
 
 DESCRIPTION
   Links a plugin into the CLI for development.
+
   Installation of a linked plugin will override a user-installed or core plugin.
 
   e.g. If you have a user-installed or core plugin that has a 'hello' command, installing a linked plugin with a 'hello'
@@ -276,18 +280,18 @@ DESCRIPTION
 
 
 EXAMPLES
-  $ mycli123 plugins link myplugin
+  $ sfdx-md-merge-driver plugins link myplugin
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.0.16/src/commands/plugins/link.ts)_
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.4.28/src/commands/plugins/link.ts)_
 
-## `mycli123 plugins remove [PLUGIN]`
+## `sfdx-md-merge-driver plugins remove [PLUGIN]`
 
 Removes a plugin from the CLI.
 
 ```
 USAGE
-  $ mycli123 plugins remove [PLUGIN...] [-h] [-v]
+  $ sfdx-md-merge-driver plugins remove [PLUGIN...] [-h] [-v]
 
 ARGUMENTS
   PLUGIN...  plugin to uninstall
@@ -300,35 +304,35 @@ DESCRIPTION
   Removes a plugin from the CLI.
 
 ALIASES
-  $ mycli123 plugins unlink
-  $ mycli123 plugins remove
+  $ sfdx-md-merge-driver plugins unlink
+  $ sfdx-md-merge-driver plugins remove
 
 EXAMPLES
-  $ mycli123 plugins remove myplugin
+  $ sfdx-md-merge-driver plugins remove myplugin
 ```
 
-## `mycli123 plugins reset`
+## `sfdx-md-merge-driver plugins reset`
 
 Remove all user-installed and linked plugins.
 
 ```
 USAGE
-  $ mycli123 plugins reset [--hard] [--reinstall]
+  $ sfdx-md-merge-driver plugins reset [--hard] [--reinstall]
 
 FLAGS
   --hard       Delete node_modules and package manager related files in addition to uninstalling plugins.
   --reinstall  Reinstall all plugins after uninstalling.
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.0.16/src/commands/plugins/reset.ts)_
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.4.28/src/commands/plugins/reset.ts)_
 
-## `mycli123 plugins uninstall [PLUGIN]`
+## `sfdx-md-merge-driver plugins uninstall [PLUGIN]`
 
 Removes a plugin from the CLI.
 
 ```
 USAGE
-  $ mycli123 plugins uninstall [PLUGIN...] [-h] [-v]
+  $ sfdx-md-merge-driver plugins uninstall [PLUGIN...] [-h] [-v]
 
 ARGUMENTS
   PLUGIN...  plugin to uninstall
@@ -341,22 +345,22 @@ DESCRIPTION
   Removes a plugin from the CLI.
 
 ALIASES
-  $ mycli123 plugins unlink
-  $ mycli123 plugins remove
+  $ sfdx-md-merge-driver plugins unlink
+  $ sfdx-md-merge-driver plugins remove
 
 EXAMPLES
-  $ mycli123 plugins uninstall myplugin
+  $ sfdx-md-merge-driver plugins uninstall myplugin
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.0.16/src/commands/plugins/uninstall.ts)_
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.4.28/src/commands/plugins/uninstall.ts)_
 
-## `mycli123 plugins unlink [PLUGIN]`
+## `sfdx-md-merge-driver plugins unlink [PLUGIN]`
 
 Removes a plugin from the CLI.
 
 ```
 USAGE
-  $ mycli123 plugins unlink [PLUGIN...] [-h] [-v]
+  $ sfdx-md-merge-driver plugins unlink [PLUGIN...] [-h] [-v]
 
 ARGUMENTS
   PLUGIN...  plugin to uninstall
@@ -369,20 +373,20 @@ DESCRIPTION
   Removes a plugin from the CLI.
 
 ALIASES
-  $ mycli123 plugins unlink
-  $ mycli123 plugins remove
+  $ sfdx-md-merge-driver plugins unlink
+  $ sfdx-md-merge-driver plugins remove
 
 EXAMPLES
-  $ mycli123 plugins unlink myplugin
+  $ sfdx-md-merge-driver plugins unlink myplugin
 ```
 
-## `mycli123 plugins update`
+## `sfdx-md-merge-driver plugins update`
 
 Update installed plugins.
 
 ```
 USAGE
-  $ mycli123 plugins update [-h] [-v]
+  $ sfdx-md-merge-driver plugins update [-h] [-v]
 
 FLAGS
   -h, --help     Show CLI help.
@@ -392,5 +396,24 @@ DESCRIPTION
   Update installed plugins.
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.0.16/src/commands/plugins/update.ts)_
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.4.28/src/commands/plugins/update.ts)_
+
+## `sfdx-md-merge-driver uninstall`
+
+Remove the previously configured driver
+
+```
+USAGE
+  $ sfdx-md-merge-driver uninstall [-g] [-h] [-n <value>]
+
+FLAGS
+  -g, --global        removes from your user-level git configuration
+  -h, --help          Show CLI help.
+  -n, --name=<value>  [default: sfdx-md-merge-driver] String to use as the merge driver name in your configuration
+
+DESCRIPTION
+  Remove the previously configured driver
+```
+
+_See code: [src/commands/uninstall.ts](https://github.com/KevinGossentCap/sfdc_merge/blob/v1.0.0-alpha.1/src/commands/uninstall.ts)_
 <!-- commandsstop -->
