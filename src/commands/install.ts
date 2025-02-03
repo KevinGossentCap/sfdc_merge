@@ -4,7 +4,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 
 import {getRoot} from '../utils/driver-utils.js'
-// import Uninstall from './uninstall.js'
+import Uninstall from './uninstall.js'
 
 export default class Install extends Command {
   static override description = 'Set up the merge driver in the current git repository'
@@ -59,9 +59,11 @@ export default class Install extends Command {
     }
 
     // Uninstall.run()
-    spawnSync.spawnSync(
-      'npx @kgossent/sfdx-md-merge-driver uninstall'
-    )
+    const uninst = new Uninstall([], this.config)
+    uninst.run()
+    // spawnSync.spawnSync(
+    //   'npx @kgossent/sfdx-md-merge-driver uninstall'
+    // )
 
     const infoDir = path.join(rootDir, '.git', 'info')
     if (!fs.existsSync(infoDir)) {

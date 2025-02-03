@@ -9,9 +9,6 @@
   "bugs": "https://github.com/KevinGossentCap/sfdc_merge/issues",
   "dependencies": {
     "@oclif/core": "^4",
-    "@oclif/plugin-help": "^6",
-    "@oclif/plugin-plugins": "^5",
-    "@salesforce/ts-types": "^2.0.12",
     "xml2js": "^0.6.2"
   },
   "devDependencies": {
