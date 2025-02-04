@@ -20,7 +20,7 @@ export default class Install extends Command {
   static override flags = {
     driver: Flags.string({
       char: 'd',
-      default: 'npx @kgossent/sfdx-md-merge-driver merge -o %O -a %A -b %B -p %P',
+      default: 'npx --legacy-peer-deps @kgossent/sfdx-md-merge-driver merge -o %O -a %A -b %B -p %P',
       deprecated: true,
       description: 'string to install as the driver in the git configuration',
     }),
