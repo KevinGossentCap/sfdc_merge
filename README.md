@@ -20,7 +20,7 @@ $ npm install -g @kgossent/sfdx-md-merge-driver
 $ sfdx-md-merge-driver COMMAND
 running command...
 $ sfdx-md-merge-driver (--version)
-@kgossent/sfdx-md-merge-driver/1.0.0-alpha.7 win32-x64 node-v22.13.1
+@kgossent/sfdx-md-merge-driver/1.0.0-alpha.8 win32-x64 node-v22.13.1
 $ sfdx-md-merge-driver --help [COMMAND]
 USAGE
   $ sfdx-md-merge-driver COMMAND
@@ -57,7 +57,7 @@ DESCRIPTION
   Set up the merge driver in the current git repository
 ```
 
-_See code: [src/commands/install.ts](https://github.com/KevinGossentCap/sfdc_merge/blob/v1.0.0-alpha.7/src/commands/install.ts)_
+_See code: [src/commands/install.ts](https://github.com/KevinGossentCap/sfdc_merge/blob/v1.0.0-alpha.8/src/commands/install.ts)_
 
 ## `sfdx-md-merge-driver merge`
 
@@ -78,7 +78,7 @@ DESCRIPTION
   Check for conflicts and merge them if possible.
 ```
 
-_See code: [src/commands/merge.ts](https://github.com/KevinGossentCap/sfdc_merge/blob/v1.0.0-alpha.7/src/commands/merge.ts)_
+_See code: [src/commands/merge.ts](https://github.com/KevinGossentCap/sfdc_merge/blob/v1.0.0-alpha.8/src/commands/merge.ts)_
 
 ## `sfdx-md-merge-driver uninstall`
 
@@ -97,5 +97,5 @@ DESCRIPTION
   Remove the previously configured driver
 ```
 
-_See code: [src/commands/uninstall.ts](https://github.com/KevinGossentCap/sfdc_merge/blob/v1.0.0-alpha.7/src/commands/uninstall.ts)_
+_See code: [src/commands/uninstall.ts](https://github.com/KevinGossentCap/sfdc_merge/blob/v1.0.0-alpha.8/src/commands/uninstall.ts)_
 <!-- commandsstop -->

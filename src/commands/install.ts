@@ -60,10 +60,11 @@ export default class Install extends Command {
       throw new Error('Current working directory is not using git or git is not installed, skipping install.')
     }
 
-    const opts = flags.global ? '--global' : '--local'
 
     if (this.areEqual(flags.files, defaultFiles)) {
-      const uninst = new Uninstall(['--name', flags.name, opts], this.config)
+      const uninstallOptions = ['--name', flags.name]
+      if (flags.global) {uninstallOptions.push('--global')}
+      const uninst = new Uninstall(uninstallOptions, this.config)
       await uninst.run()
     }
 
@@ -73,6 +74,7 @@ export default class Install extends Command {
     }
 
     // add to git config
+    const opts = flags.global ? '--global' : '--local'
     const configOne = spawnSync.spawnSync(
       'git',
       ['config', opts, 'merge.'+flags.name+'.name', 'automatically merge npm lockfiles'],
